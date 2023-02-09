@@ -16,14 +16,15 @@ public class Main {
     }
 
     private static Boolean checkGroup(String str) {
-        boolean[] check = new boolean[26]; // 한번 나오면 true
+        Boolean[] check = new Boolean[26]; // 한번 나오면 true
+        //Boolean을 썼더니 x
         int prev = 0;
 
         for(int j =0; j<str.length();j++){
             int now = str.charAt(j);
 
             if(prev != now)
-                if(check[now -'a'] == false) {// 해당 문자가 처음 나오는 경우 (false 인 경우)
+                if(check[now -'a'] == null) {// 해당 문자가 처음 나오는 경우 (false 인 경우)
                     check[now - 'a'] = true;
                     prev = now;
                 }
