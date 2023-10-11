@@ -1,5 +1,5 @@
-
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
@@ -13,7 +13,7 @@ public class Main {
         int[] happy = new int[N];
 
         int[] dp = new int[100];
-        // 남은 체력이 j일 때의 최대 기쁨 값
+        // N번째 사람일 때, 남은 체력이 j일 때의 최대 기쁨 값
 
         for (int i = 0; i < N; i++) {
             happy[i] = Integer.parseInt(happyStr[i]);
