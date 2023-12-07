@@ -1,33 +1,25 @@
-import java.io.*;
-import java.nio.Buffer;
 import java.util.*;
-import java.util.stream.Stream;
+import java.io.*;
 
 public class Main {
-
     public static void main(String[] args) throws IOException {
-        //분해합
-        // 어떤 M의 분해합이 N 인 경우
-        // M은 N의 생성자이다
-
-        // N이 주어졌을 때 N의 가장 작은 생성자를 구하는 프로그램
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         Integer N = Integer.parseInt(br.readLine());
+        int min = 0;
 
-        System.out.println(bunhaeHap(N));
-    }
-
-    private static int bunhaeHap(Integer n) {
-        for (int i = 0; i < n; i++) {
-            String[] str = String.valueOf(i).split("");
+        for (int i = 1; i <= N; i++) {
+            String strI = String.valueOf(i);
             int sum = i;
-
-            for (int j = 0; j < str.length; j++) {
-                sum += Integer.parseInt(str[j]);
+            for (int j = 0; j < strI.length(); j++) {
+                sum += strI.charAt(j) - '0';
             }
 
-            if (sum == n) return i;
+            if (sum == N) {
+                min = i;
+                break;
+            }
         }
-        return 0;
+
+        System.out.println(min);
     }
 }
