@@ -1,67 +1,59 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Main {
-    static int[] dx = {1, 0, -1, 0};
-    static int[] dy = {0, -1, 0, 1};
+    static char[][] arr;
+    static boolean[][] visited;
+    static int[] dx = {0, 0, -1, 1};
+    static int[] dy = {-1, 1, 0, 0};
+    static List<Integer> list;
     static int count = 0;
-    static int danziCount = 0; // 단지 수
-    static List<Integer> houseCount = new ArrayList<>(); // 단지에 속하는 집의 수
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-
-        int N = Integer.parseInt(br.readLine()); // 지도의 크기
-        int map[][] = new int[N][N];
-        int visited[][] = new int[N][N]; // 방문처리
+        int N = Integer.parseInt(br.readLine());
+        arr = new char[N][N];
+        visited = new boolean[N][N];
+        list = new ArrayList<>();
 
         for (int i = 0; i < N; i++) {
-            String[] str = br.readLine().split("");
-            for (int j = 0; j < N; j++) {
-                map[i][j] = Integer.parseInt(str[j]);
-            }
+            arr[i] = br.readLine().toCharArray();
         }
 
         for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (map[i][j] == 1 && visited[i][j] == 0) {
-                    count = 1; //현재 위치의 집 포함
-                    houseCount.add(DFS(i, j, map, visited));
-                    danziCount++;
+            for (int j = 0; j < arr[i].length; j++) {
+                if (arr[i][j] == '1' && !visited[i][j]) {
+                    count = 1;
+                    dfs(i, j);
+                    list.add(count);
                 }
             }
         }
 
-        if (danziCount == 0) System.out.println(0);
-        else {
-            Collections.sort(houseCount);
-
-            System.out.println(danziCount); // 단지 수 출력
-            for (Integer i : houseCount) {
-                System.out.println(i); // 단지에 속하는 집의 수 출력
-            }
+        Collections.sort(list);
+        System.out.println(list.size());
+        for (int i : list) {
+            System.out.println(i);
         }
-
     }
 
-    public static int DFS(int x, int y, int map[][], int visited[][]) {
-        visited[x][y] = 1;
+    public static void dfs(int x, int y) {
+        visited[x][y] = true;
 
         for (int i = 0; i < 4; i++) {
-            int nextX = x + dx[i];
-            int nextY = y + dy[i];
+            int nx = x + dx[i];
+            int ny = y + dy[i];
 
-            if (isValidNum(nextX, nextY, map) && map[nextX][nextY] == 1 && visited[nextX][nextY] == 0) {
-                DFS(nextX, nextY, map, visited);
-                count++;
+            if (nx >= 0 && nx < arr.length && ny >= 0 && ny < arr.length) {
+                if (!visited[nx][ny] && arr[nx][ny] == '1') {
+                    count++;
+                    dfs(nx, ny);
+                }
             }
         }
-
-        return count;
-    }
-
-    private static boolean isValidNum(int x, int y, int[][] map) {
-        return (x >= 0 && x < map.length && y >= 0 && y < map.length);
     }
 }
