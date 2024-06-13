@@ -2,62 +2,42 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class Main {
-    static int m;
-    static int[] snacks;
-
+    static int arr[];
+    static int M;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String[] str = br.readLine().split(" ");
-        m = Integer.parseInt(str[0]); // 조카의 수
-        int n = Integer.parseInt(str[1]); // 과자의 수
 
-        // 길이와 상관없이 여러 조각으로 나눠질 수 있지만, 과자를 하나로 합칠 수는 없다.
-        snacks = new int[n];
+        M = Integer.parseInt(str[0]);
+        int N = Integer.parseInt(str[1]);
         str = br.readLine().split(" ");
-        for (int i = 0; i < n; i++) {
-            snacks[i] = Integer.parseInt(str[i]);
+        arr = new int[N];
+        for (int i = 0; i < N; i++) {
+            arr[i] = Integer.parseInt(str[i]);
         }
-        Arrays.sort(snacks);
+        // 과자를 a 길이로 잘랐을 때 다 먹기 가능?
 
-        if (m == 1) {
-            System.out.println(snacks[snacks.length - 1]);
-            return;
-        }
-
-        // 0 ~ last
-        int start = 1;
-        int end = snacks[n - 1];
-        int mid = (start + end) / 2;
-
-        if (mid <= 0 || !canEat(1)) {
-            System.out.println(0);
-            return;
-        }
-
-        while (start != end) {
+        int lo = 0;
+        int hi = 1_000_000_000 + 1;
+        while (lo + 1 < hi) {
+            int mid = (lo + hi) / 2;
             if (canEat(mid)) {
-                if (mid < end && !canEat(mid + 1)) {
-                    break;
-                } else {
-                    start = mid + 1;
-                }
-            } else { // 7 7
-                end = mid - 1;
+                lo = mid;
+            } else {
+                hi = mid;
             }
-            mid = (start + end) / 2;
         }
 
-        System.out.println(mid);
+        System.out.println(lo);
     }
 
-    private static boolean canEat(int length) {
+    private static boolean canEat(int x) {
         int count = 0;
-        for (int i = 0; i < snacks.length; i++) {
-            count += snacks[i] / length;
+        for (int i = 0; i < arr.length ; i++) {
+            count += arr[i] / x;
         }
-        return m <= count;
+        return count >= M;
     }
 }
