@@ -1,68 +1,26 @@
 import java.util.*;
-import java.io.*;
+import java.util.stream.*;
 
 class Solution {
-    public int[] solution(int[] answers) {        
-        int index1 = 1, index2 = 2, index3 = 3;
+    public int[] solution(int[] answers) {
+        int[][] student = {
+            {1, 2, 3, 4, 5}, 
+            {2, 1, 2, 3, 2, 4, 2, 5},
+            {3, 3, 1, 1, 2, 2, 4, 4, 5, 5} 
+        };
         
-        int[] correct = new int [3];
-        Arrays.fill(correct, 0);
-        
+        int[] answer = new int[3];
         for (int i = 0; i < answers.length; i++) {
-           if (answers[i] == index1) {
-                correct[0]++;
+            for (int j = 0; j < 3; j++) {
+                if (answers[i] == student[j][i % student[j].length]) answer[j]++;
             }
-           if (answers[i] == index2) {
-                correct[1]++;
-            }
-           if (answers[i] == index3) {
-                correct[2]++;
-            }
-            
-            
-            // 1            
-            if (index1 == 5) {
-                index1 = 1;
-            } else index1++;
-            
-            // 2
-            if (i % 2 == 1) {
-                index2 = 2;
-            } else {
-                int div = i % 8;
-                if (div == 0) index2 = 1;
-                if (div == 2) index2 = 3;
-                if (div == 4) index2 = 4;
-                if (div == 6) index2 = 5;
-            }
-            
-            // 3
-            if (i % 2 == 1) {
-                if (index3 == 3) index3 = 1;
-                else if (index3 == 2) index3 = 4;
-                else if (index3 == 5) index3 = 3;                
-                else index3++; 
-            } 
-                        System.out.println("1 " + index1);
-                        System.out.println("2 " + index2);
-                        System.out.println("3 " + index3);
         }
         
-        List<Integer> list = new ArrayList<>();
-        int max = 0;
-        
-        for (int i = 0; i < 3; i++) {
-            System.out.println(correct[i]);
-            if (correct[i] > max) {
-                list = new ArrayList<>();
-                list.add(i + 1);
-                max = correct[i];
-            }
-            else if (correct[i] == max) list.add(i + 1);
-        }
-        
-        return list.stream()
-            .mapToInt(i -> i)
+        int max = Arrays.stream(answer).max().getAsInt();
+
+        return IntStream.range(0, 3)
+            .filter(i -> answer[i] == max)
+            .map(i -> i + 1)
             .toArray();
     }
 }
