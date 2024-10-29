@@ -1,5 +1,6 @@
-import java.util.*;
-
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 class Solution {
     public int solution(int n, int[][] computers) {
         int answer = 0;
@@ -31,7 +32,7 @@ class Solution {
         return answer;
     }
 
-    private void bfs(int x, int y, int[][] computers, boolean[][] visited, boolean[] done) {
+    private static void bfs(int x, int y, int[][] computers, boolean[][] visited, boolean[] done) {
         Queue<Integer> q = new LinkedList<>();
 
         q.add(x);
@@ -57,5 +58,4 @@ class Solution {
             }
         }
     }
-
 }
