@@ -5,28 +5,32 @@ class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
         int answer = 0;
         
-        List<Integer> reserves = Arrays.stream(reserve).boxed().collect(Collectors.toList());
         List<Integer> losts = Arrays.stream(lost).boxed().collect(Collectors.toList());
+        List<Integer> reserves = Arrays.stream(reserve).boxed().collect(Collectors.toList());
         
-        List<Integer> hs = new ArrayList<>();
-        for (int i: losts) {
+        Collections.sort(losts);
+        Collections.sort(reserves);
+        
+        List<Integer> rms = new ArrayList<>();
+        for (int i : losts) {
             if (reserves.contains(i)) {
-                reserves.remove((Integer) i);
-                hs.add(i);
+                rms.add(i); 
             }
         }
+        losts.removeAll(rms);
+        reserves.removeAll(rms);
         
-        losts.removeAll(hs);
-        Collections.sort(losts);
-        
-        for (int i: losts) {
+        for (Integer i : losts) {
             if (reserves.contains(i - 1)) {
-                reserves.remove((Integer) (i - 1));
-            } else if (reserves.contains(i + 1)) {
-                reserves.remove((Integer) (i + 1));
-            } else {
-                answer++;
+                reserves.remove((Integer) (i - 1)); 
+                continue;
             }
+
+            if (reserves.contains(i + 1)) {
+                reserves.remove((Integer) (i + 1)); 
+                continue;
+            }
+            answer++;
         }
         
         return n - answer;
