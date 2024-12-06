@@ -1,53 +1,51 @@
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-    static int[] operator = new int[4]; // + - * /
-    static int max = Integer.MIN_VALUE;
+    static int[] arr;
+    static boolean[] visited;
     static int min = Integer.MAX_VALUE;
-    static Integer[] nums;
-    static Integer N;
+    static int max = Integer.MIN_VALUE;
+    static int[] operator = new int[4];
     public static void main(String[] args) throws IOException {
-        // sort -> 작은 거, /, + 큰거 *
-        // + * 543
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine()); // 수의 개수
-        String[] As = br.readLine().split(" "); // 수
-        String[] oper = br.readLine().split(" "); // 연산자
+        int N = Integer.parseInt(br.readLine());
+        arr = new int[N];
+        visited = new boolean[N];
 
-        nums = new Integer[N];
+        String[] str = br.readLine().split(" ");
         for (int i = 0; i < N; i++) {
-            nums[i] = Integer.parseInt(As[i]);
+            arr[i] = Integer.parseInt(str[i]);
         }
 
+        str = br.readLine().split(" ");
         for (int i = 0; i < 4; i++) {
-            operator[i] = Integer.parseInt(oper[i]);
+            operator[i] = Integer.parseInt(str[i]);
         }
 
-        dfs(nums[0], 1);
+        dfs(arr[0], 1);
         System.out.println(max);
         System.out.println(min);
     }
 
-    public static void dfs(int num, int index) {
-        if (index == N) {
-            max = Math.max(max, num);
-            min = Math.min(min, num);
+    public static void dfs(int hap, int depth) {
+        if (depth == arr.length) {
+            min = Math.min(min, hap);
+            max = Math.max(max, hap);
             return;
         }
 
         for (int i = 0; i < 4; i++) {
             if (operator[i] > 0) {
                 operator[i]--;
-
-                switch (i) {
-                    case 0:	dfs(num + nums[index], index + 1);	break;
-                    case 1:	dfs(num - nums[index], index + 1);	break;
-                    case 2:	dfs(num * nums[index], index + 1);	break;
-                    case 3:	dfs(num / nums[index], index + 1);	break;
+                if (i == 0) {
+                    dfs(hap + arr[depth], depth + 1);
+                } else if (i == 1) {
+                    dfs(hap - arr[depth], depth + 1);
+                } else if (i == 2) {
+                    dfs(hap * arr[depth], depth + 1);
+                } else {
+                    dfs(hap / arr[depth], depth + 1);
                 }
                 operator[i]++;
             }
