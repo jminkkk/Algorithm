@@ -1,23 +1,35 @@
 import java.util.*;
 
 class Solution {
-    static List<String> list = new ArrayList<>();
-    static String[] arr = new String[]{ "A", "E", "I", "O", "U" };
+    static int n;
+    static List<String> list;
+    static String[] arr = new String[]{"A", "E", "I", "O", "U"};
+    
     public int solution(String word) {
-        dfs(0, "");
+        int answer = 0;
+        list = new ArrayList<>();
         
-        System.out.println(list);
-        return list.indexOf(word);
+        for (int i = 0; i < 5; i++) {
+            dfs(arr[i], 1);
+        }        
+        
+        Collections.sort(list);
+        
+        return list.indexOf(word) + 1;
     }
     
-    public void dfs(int count, String str) {
-        if (!list.contains(str)) list.add(str);
-        if (count == 5) return;
-            
-        for (int a = 0; a < 5; a++) {
-            dfs(count + 1 ,str + arr[a]);
+    private void dfs(String now, int depth) {
+        list.add(now);
+        
+        if (depth == 5) {
+            return;
         }
-
+        
+        for (int i = 0; i < 5; i++) {
+            dfs(now + arr[i], depth + 1);
+        }        
     }
 }
-// 다 만들고 sort , indexOf 로 알아내기 
+
+// 다 만들고 Map
+// 단어가 있을 때, 가장 작은 것 붙이기 vs 뒤에꺼 올리기
