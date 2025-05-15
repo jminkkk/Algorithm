@@ -13,8 +13,7 @@ public class Main {
         String[] arr = Arrays.stream(words)
             .filter(word -> word.startsWith(t))
             .sorted()
-            .mapToString(i -> i)
-            .toArray();
+            .toArray(String[]::new);
         System.out.println(arr[k - 1]);
     }
 }
