@@ -14,6 +14,6 @@ public class Main {
         for (int i = 1; i < n / 2; i++) {
             max = Math.max(max, nums[i] + nums[n - 1 - i]);
         }
-        System.out.println(min);
+        System.out.println(max);
     }
 }
