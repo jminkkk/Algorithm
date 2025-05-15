@@ -12,7 +12,7 @@ public class Main {
         // 0 1 2 3 4 5
         int max = nums[0] + nums[n - 1];
         for (int i = 1; i < n / 2; i++) {
-            max = Math.max(min, nums[i] + nums[n - 1 - i]);
+            max = Math.max(max, nums[i] + nums[n - 1 - i]);
         }
         System.out.println(min);
     }
