@@ -1,6 +1,6 @@
 import java.util.Scanner;
 public class Main {
-    static int[] days = new int[]{0, 31, 28, 31, 30, 31, 30, 31, 30, 31, 30, 31, 30};
+    static int[] days = new int[]{0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     static String[] yoil = new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 
     private static int get(int m, int d) {
@@ -22,7 +22,9 @@ public class Main {
         
         int gap = get(m2, d2) - get(m1, d1);
 
-        if (gap >= 0) {
+        if (gap == 0) {
+            System.out.println(yoil[0]);
+        } else if (gap >0) {
             System.out.println(yoil[gap % 7]);
         } else {
             System.out.println(yoil[7 - (Math.abs(gap) % 7)]);
