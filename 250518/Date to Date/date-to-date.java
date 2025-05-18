@@ -11,7 +11,11 @@ public class Main {
         int sum = 0;
         while (m1 != m2 || d1 != d2) {
             if (m1 == m2) {
-                sum += (d2 - d1);
+                if (d1 >= d2) {
+                    sum += (d2 - d1) + 1;
+                } else {
+                    sum += (d2 - d1);
+                }
                 break;
             }
 
