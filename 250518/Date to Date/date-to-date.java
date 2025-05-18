@@ -9,7 +9,7 @@ public class Main {
         // Please write your code here.
         
         int sum = 0;
-        while (m1 != m2 || d1 != d2) {
+        while (true) {
             if (m1 == m2) {
                 if (d1 >= d2) {
                     sum += (d2 - d1) + 1;
