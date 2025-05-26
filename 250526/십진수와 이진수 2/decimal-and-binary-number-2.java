@@ -1,4 +1,4 @@
-import java.util.Scanner;
+import java.util.*;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -16,13 +16,17 @@ public class Main {
         sum *= 17;
         cnt = 0;
 
-        int answer = 0;
-        while (sum >= 2) {
-            answer += (sum % 2) * Math.pow(10, cnt++);
+        List<Integer> list = new ArrayList<>();
+        while (sum >= 1) {
+            list.add(sum % 2);
             sum /= 2;
         }
 
-        answer += (sum % 2) * Math.pow(10, cnt++);
-        System.out.println(answer);
+        StringBuilder sb = new StringBuilder();
+        for (int i = list.size() - 1; i >= 0; i--) {
+            sb.append(list.get(i));
+        }
+
+        System.out.println(sb.toString());
     }
 }
