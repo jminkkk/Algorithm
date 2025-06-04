@@ -2,20 +2,20 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int ax1 = sc.nextInt();
-        int ay1 = sc.nextInt();
-        int ax2 = sc.nextInt();
-        int ay2 = sc.nextInt();
+        int ax1 = sc.nextInt() + 1000;
+        int ay1 = sc.nextInt() + 1000;
+        int ax2 = sc.nextInt() + 1000;
+        int ay2 = sc.nextInt() + 1000;
 
-        int bx1 = sc.nextInt();
-        int by1 = sc.nextInt();
-        int bx2 = sc.nextInt();
-        int by2 = sc.nextInt();
+        int bx1 = sc.nextInt() + 1000;
+        int by1 = sc.nextInt() + 1000;
+        int bx2 = sc.nextInt() + 1000;
+        int by2 = sc.nextInt() + 1000;
 
-        int mx1 = sc.nextInt();
-        int my1 = sc.nextInt();
-        int mx2 = sc.nextInt();
-        int my2 = sc.nextInt();
+        int mx1 = sc.nextInt() + 1000;
+        int my1 = sc.nextInt() + 1000;
+        int mx2 = sc.nextInt() + 1000;
+        int my2 = sc.nextInt() + 1000;
         // Please write your code here.
         int maxAC = Math.max(ax1, ax2);
         int maxAR = Math.max(ay1, ay2);
