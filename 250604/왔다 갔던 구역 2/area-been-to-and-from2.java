@@ -6,6 +6,7 @@ public class Main {
         
         int now = 1000;
         int[] arr = new int[2001];
+        char pre = '0';
         for (int i = 0; i < N; i++) {
             int x = sc.nextInt();
             char dir = sc.next().charAt(0);
@@ -16,10 +17,10 @@ public class Main {
                 }
             } else {
                 for (int j = 0; j < x; j++) {
-                    arr[now--]++;
+                    arr[--now]++;
                 }
             }
-            
+            pre = dir;
         }
         
         int answer = 0;
