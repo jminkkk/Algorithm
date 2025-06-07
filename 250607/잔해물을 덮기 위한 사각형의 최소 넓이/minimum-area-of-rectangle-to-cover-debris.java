@@ -26,7 +26,7 @@ public class Main {
             }
         }
         
-        int minR = 2000, minC = 2000, maxR = 0, maxC = 0;
+        int minR = 2001, minC = 2001, maxR = 0, maxC = 0;
         for (int i = 0; i <= rect1_y2; i++) {
             for (int j = 0; j <= rect1_x2; j++) {
                 if (arr[i][j] == 1) {
@@ -36,6 +36,10 @@ public class Main {
                     maxC = Math.max(maxC, j);
                 }
             }
+        }
+        if (minR == 2001 || minC == 2001) {
+            System.out.println(0);
+            return;
         }
         System.out.println((maxR - minR + 1) * (maxC - minC + 1));
     }
