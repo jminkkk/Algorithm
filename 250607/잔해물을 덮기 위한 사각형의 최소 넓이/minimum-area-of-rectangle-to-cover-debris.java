@@ -22,7 +22,7 @@ public class Main {
 
         for (int i = rect2_y1; i < rect2_y2; i++) {
             for (int j = rect2_x1; j < rect2_x2; j++) {
-                if (i <= rect1_x2 &&  j <= rect1_x2) arr[i][j] = 0;
+                if (i <= rect1_y2 &&  j <= rect1_x2) arr[i][j] = 0;
             }
         }
         
