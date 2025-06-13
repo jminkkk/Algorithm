@@ -60,6 +60,7 @@ public class Main {
             }
         }
 
-        System.out.println(answer + 1);
+        if (changed) System.out.println(answer + 1);
+        else System.out.println(-1);
     }
 }
