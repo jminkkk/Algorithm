@@ -16,9 +16,11 @@ public class Main {
             student[penalizedPerson[i] - 1]++;
             if (!pernalty && student[penalizedPerson[i] - 1] == k) {
                 System.out.println(penalizedPerson[i]);
-                break;
+                pernalty = true;
             }
         }
+
+        if (!pernalty) System.out.println(-1);
         // Please write your code here.
     }
 }
