@@ -27,14 +27,14 @@ public class Main {
             if (virus[node.x] && cnt[node.x] <= K) {
                 cnt[node.x]++;
                 
-                if (!virus[node.y] || cnt[node.y] >= K) virus[node.y] = true;
+                if (!virus[node.y] || cnt[node.y] > K) virus[node.y] = true;
                 else cnt[node.y]++;
             }
 
             if (virus[node.y] && cnt[node.y] <= K) {
                 cnt[node.y]++;
                 
-                if (!virus[node.x] || cnt[node.x] >= K) virus[node.x] = true;
+                if (!virus[node.x] || cnt[node.x] > K) virus[node.x] = true;
                 else cnt[node.x]++;
             }
         }
