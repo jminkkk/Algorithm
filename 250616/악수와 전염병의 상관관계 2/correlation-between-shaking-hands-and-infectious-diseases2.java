@@ -18,16 +18,24 @@ public class Main {
             pq.add(new Node(shakes[i][0], shakes[i][1], shakes[i][2]));
         }
         
+        int[] cnt = new int[N];
         virus[P - 1] = true;
         while (!pq.isEmpty()) {
             Node node = pq.poll();
-            if (virus[node.x] || virus[node.y]) {
-                if ((node.x == P - 1) ||(node.y == P - 1)) {
-                    if (K <= 0) continue;
-                    K--;
-                }
-                virus[node.x] = true;
-                virus[node.y] = true;
+            if (!virus[node.x] && !virus[node.y]) continue;
+
+            if (virus[node.x] && cnt[node.x] <= K) {
+                cnt[node.x]++;
+                
+                if (!virus[node.y] || cnt[node.y] >= K) virus[node.y] = true;
+                else cnt[node.y]++;
+            }
+
+            if (virus[node.y] && cnt[node.y] <= K) {
+                cnt[node.y]++;
+                
+                if (!virus[node.x] || cnt[node.x] >= K) virus[node.x] = true;
+                else cnt[node.x]++;
             }
         }
 
