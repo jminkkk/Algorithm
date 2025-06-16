@@ -22,23 +22,37 @@ public class Main {
         virus[P - 1] = true;
         while (!pq.isEmpty()) {
             Node node = pq.poll();
-            if (!virus[node.x] && !virus[node.y]) continue;
-            if (virus[node.x] && cnt[node.x] >= K && virus[node.y] && cnt[node.y] >= K) continue;
+            // if (!virus[node.x] && !virus[node.y]) continue;
+            // if (virus[node.x] && cnt[node.x] >= K && virus[node.y] && cnt[node.y] >= K) continue;
 
-            if (virus[node.x] && cnt[node.x] < K && virus[node.y] && cnt[node.y] < K) {
-                cnt[node.x]++;
-                cnt[node.y]++;
-                continue;
-            }
+            // if (virus[node.x] && cnt[node.x] < K && virus[node.y] && cnt[node.y] < K) {
+            //     cnt[node.x]++;
+            //     cnt[node.y]++;
+            //     continue;
+            // }
 
-            if (virus[node.x] && cnt[node.x] < K) {
-                cnt[node.x]++;
-                 virus[node.y] = true;
-            }
+            // if (virus[node.x] && cnt[node.x] < K) {
+            //     cnt[node.x]++;
+            //     virus[node.y] = true;
+            // }
 
-            if (virus[node.y] && cnt[node.y] < K) {
-                cnt[node.y]++;
-                virus[node.x] = true;
+            // if (virus[node.y] && cnt[node.y] < K) {
+            //     cnt[node.y]++;
+            //     virus[node.x] = true;
+            // }
+            int x = node.x;
+            int y = node.y;
+            if (!virus[x] && !virus[y]) continue;
+
+            if (virus[x] && cnt[x] < K && !virus[y]) {
+                virus[y] = true;
+                cnt[x]++;
+            } else if (virus[y] && cnt[y] < K && !virus[x]) {
+                virus[x] = true;
+                cnt[y]++;
+            } else if (virus[x] && virus[y]) {
+                if (cnt[x] < K) cnt[x]++;
+                if (cnt[y] < K) cnt[y]++;
             }
         }
 
