@@ -23,19 +23,22 @@ public class Main {
         while (!pq.isEmpty()) {
             Node node = pq.poll();
             if (!virus[node.x] && !virus[node.y]) continue;
+            if (virus[node.x] && cnt[node.x] >= K && virus[node.y] && cnt[node.y] >= K) continue;
 
-            if (virus[node.x] && cnt[node.x] <= K) {
+            if (virus[node.x] && cnt[node.x] < K && virus[node.y] && cnt[node.y] < K) {
                 cnt[node.x]++;
-                
-                if (!virus[node.y] || cnt[node.y] > K) virus[node.y] = true;
-                else cnt[node.y]++;
+                cnt[node.y]++;
+                continue;
             }
 
-            if (virus[node.y] && cnt[node.y] <= K) {
+            if (virus[node.x] && cnt[node.x] < K) {
+                cnt[node.x]++;
+                 virus[node.y] = true;
+            }
+
+            if (virus[node.y] && cnt[node.y] < K) {
                 cnt[node.y]++;
-                
-                if (!virus[node.x] || cnt[node.x] > K) virus[node.x] = true;
-                else cnt[node.x]++;
+                virus[node.x] = true;
             }
         }
 
