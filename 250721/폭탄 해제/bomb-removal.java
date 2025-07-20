@@ -23,9 +23,9 @@ class Dumb {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("code: ").append(code).append("\n");
-        sb.append("color: ").append(color).append("\n");
-        sb.append("second: ").append(second).append("\n");
+        sb.append("code : ").append(code).append("\n");
+        sb.append("color : ").append(color).append("\n");
+        sb.append("second : ").append(second);
         return sb.toString();
     }
 }
