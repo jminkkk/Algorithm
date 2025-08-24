@@ -13,7 +13,7 @@ public class Main {
         int idx = 0;
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] == 'L') idx = (idx - 1 + 4) % 4;
-            else if (arr[i] == 'S') idx = (idx + 1) % 4;
+            else if (arr[i] == 'R') idx = (idx + 1) % 4;
             else if (arr[i] == 'F') {
                 x += dx[idx];
                 y += dy[idx];
