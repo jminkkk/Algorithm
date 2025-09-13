@@ -2,28 +2,38 @@ import java.util.*;
 import java.time.*;
 
 class Solution {
-    public int[] solution(String today, String[] terms, String[] privacies) {
-        Map<String, Integer> maps = new HashMap<>();
-        for (int i = 0; i < terms.length; i++) {
-            String[] typeAndDate = terms[i].split(" ");
-            maps.put(typeAndDate[0], Integer.parseInt(typeAndDate[1]));
+    public int[] solution(String today, String[] terms, String[] privacies) {        
+        List<Integer> list = new ArrayList<>();
+        // 약관 종류 및 유효기간
+        Map<String, Integer> typesAndMonth = new HashMap<>();
+        for (String term: terms) {
+            String[] arr = term.split(" ");
+            typesAndMonth.put(arr[0], Integer.parseInt(arr[1]));
         }
         
-        today = today.replace('.', '-');
-        LocalDate now = LocalDate.parse(today);
+        LocalDate todayDate = of(today);
         
-        // 파기해야 할 개인정보의 번호를 오름차순으로 1차원 정수 배열
-        List<Integer> index = new ArrayList<>();
-        for (int i = 0; i < privacies.length; i++) {
-            String[] dateAndType = privacies[i].split(" ");
+        // 개인정보 번호 및 수집일자
+        Map<Integer, LocalDate> numsAndDue = new HashMap<>();
+        for (int i = 0; i < privacies.length; i++) { // 날짜 약관종류
+            String privacie = privacies[i];
+            String[] arr = privacie.split(" ");
+            LocalDate start = of(arr[0]);
+            int month = typesAndMonth.get(arr[1]);
+            LocalDate end = start.plusMonths(month);
             
-            dateAndType[0] = dateAndType[0].replace('.', '-');
-            LocalDate magam = LocalDate.parse(dateAndType[0]);
-            if (!magam.plusMonths(maps.get(dateAndType[1])).isAfter(now)) {
-                index.add(i + 1);
-            }
+            if (end.isBefore(todayDate) || end.isEqual(todayDate)) list.add(i + 1);
         }
         
-        return index.stream().mapToInt(i -> i).toArray();
+        int[] answer = list.stream().mapToInt(i -> i).toArray();
+        return answer;
+    }
+    
+    public LocalDate of(String date) {
+        String[] arr = date.split("\\.");
+        // return LocalDate.now();
+        return LocalDate.of(Integer.parseInt(arr[0]), 
+                            Integer.parseInt(arr[1]), 
+                            Integer.parseInt(arr[2]));
     }
 }
