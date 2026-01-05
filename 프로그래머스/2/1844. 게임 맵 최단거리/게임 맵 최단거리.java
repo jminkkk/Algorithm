@@ -1,55 +1,57 @@
 import java.util.*;
-
 class Solution {
-    public  int solution(int[][] maps) {
-        int xLength = maps.length;
-        int yLength = maps[0].length;
-
-        boolean[][] visited = new boolean[xLength][yLength];
+    int answer = Integer.MAX_VALUE;
+    int[] dx = {0, 1, 0, -1};
+    int[] dy = {1, 0, -1, 0};
+    
+    public int solution(int[][] maps) {
+        boolean[][] visited = new boolean[maps.length][maps[0].length];   
         
-        int shortestPath = bfs(0, 0, maps, visited, xLength, yLength);
-
-        return shortestPath == 0 ? -1 : shortestPath;
-    }
-
-    public  int bfs(int x, int y, int[][] maps, boolean[][] visited, int xLength, int yLength) {
-        int[] dx = {0, 1, 0, -1};
-        int[] dy = {1, 0, -1, 0};
-
-        Queue<Point> queue = new LinkedList<>();
-        queue.add(new Point(x, y, 1)); // 시작점의 count를 1로 설정
-
-        visited[x][y] = true;
-
-        while (!queue.isEmpty()) {
-            Point now = queue.poll();
-
-            if (now.x == xLength - 1 && now.y == yLength - 1) {
-                return now.count;
+        Queue<Point> q = new LinkedList<>();
+        q.add(new Point(0, 0, 1));
+        visited[0][0] = true;
+        
+        while (!q.isEmpty()) {
+            Point p = q.poll();
+            int x = p.x;
+            int y = p.y;
+            int distance = p.distance;
+            
+            if (x == maps.length - 1 && y == maps[0].length - 1) {
+                answer = Math.min(distance, answer);
+                continue;
             }
 
             for (int i = 0; i < 4; i++) {
-                int nx = now.x + dx[i];
-                int ny = now.y + dy[i];
+                int nx = x + dx[i];
+                int ny = y + dy[i];
 
-                if (nx >= 0 && nx < xLength && ny >= 0 && ny < yLength && !visited[nx][ny] && maps[nx][ny] == 1) {
-                    visited[nx][ny] = true;
-                    queue.add(new Point(nx, ny, now.count + 1));
-                }
+                if (!canGo(nx, ny, maps.length, maps[0].length, maps)) continue;
+                if (visited[nx][ny]) continue;
+
+                visited[nx][ny] = true;
+                q.add(new Point(nx, ny, distance + 1));
+                // visited[nx][ny] = false;
             }
         }
-        return 0; // 도달할 수 없는 경우
+        
+        if (answer == Integer.MAX_VALUE) answer = - 1;
+        return answer;
+    }
+
+    public boolean canGo(int x, int y, int n, int m, int[][] maps) {
+        return x >= 0 && y >= 0 && x < n && y < m && maps[x][y] == 1;
     }
 }
 
 class Point {
     int x;
     int y;
-    int count;
-
-    public Point(int x, int y, int count) {
+    int distance;
+    
+    Point(int x, int y, int distance) {
         this.x = x;
         this.y = y;
-        this.count = count;
+        this.distance = distance;
     }
 }
