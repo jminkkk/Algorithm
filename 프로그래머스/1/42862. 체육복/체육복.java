@@ -1,38 +1,42 @@
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
         int answer = 0;
+        boolean[] leased = new boolean[n + 1];
         
-        List<Integer> losts = Arrays.stream(lost).boxed().collect(Collectors.toList());
-        List<Integer> reserves = Arrays.stream(reserve).boxed().collect(Collectors.toList());
+        for (int num: reserve) {
+            leased[num] = true; // 빌려줄 수 있음
+        }
         
-        Collections.sort(losts);
-        Collections.sort(reserves);
-        
-        List<Integer> rms = new ArrayList<>();
-        for (int i : losts) {
-            if (reserves.contains(i)) {
-                rms.add(i); 
+        List<Integer> lostList = Arrays.stream(lost)
+                                        .boxed()
+                                        .sorted()
+                                        .collect(Collectors.toList());
+
+        for (int num: lost) { // 자기 옷이 도난 당했지만, 여벌 있는 경우 먼저 체크 
+            if (leased[num]) { 
+                leased[num] = false;
+                lostList.remove((Integer) num);
             }
         }
-        losts.removeAll(rms);
-        reserves.removeAll(rms);
         
-        for (Integer i : losts) {
-            if (reserves.contains(i - 1)) {
-                reserves.remove((Integer) (i - 1)); 
+        // System.out.println(lostList);
+        
+        for (int num: lostList) {
+            if (num >= 1 && leased[num - 1]) { // 현재 기준 앞사람 옷 빌림
+                leased[num - 1] = false;
                 continue;
             }
-
-            if (reserves.contains(i + 1)) {
-                reserves.remove((Integer) (i + 1)); 
+            
+            if (num < n && leased[num + 1]) { // 현재 기준 뒷사람 옷 빌림
+                leased[num + 1] = false;
                 continue;
             }
+            
             answer++;
         }
-        
         return n - answer;
     }
 }
