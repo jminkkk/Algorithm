@@ -1,26 +1,18 @@
-import java.util.*;
-
 class Solution {
     public String solution(String number, int k) {
-        String answer = "";
-        StringBuilder answerBuilder = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-        char[] array = number.toCharArray();
-        
-        int len = array.length - k;
-        int start = 0;
+        for (int i = 0; i < number.length(); i++) {
+            char c = number.charAt(i);
 
-        for(int i =0; i<len; i++){
-            char max = '0';
-            for(int j = start; j <= i + k; j++){
-                if(array[j] > max){
-                    max = array[j];
-                    start = j + 1;
-                }
+            while (k > 0 && sb.length() > 0 && sb.charAt(sb.length() - 1) < c) {
+                sb.deleteCharAt(sb.length() - 1);
+                k--;
             }
-            answerBuilder.append(Character.toString(max));
+            sb.append(c);
         }
-        answer = answerBuilder.toString();
-        return answer;
+
+        // 아직 제거할 게 남아있으면 뒤에서 자르기
+        return sb.substring(0, sb.length() - k);
     }
 }
