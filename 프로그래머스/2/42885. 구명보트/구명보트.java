@@ -5,20 +5,21 @@ class Solution {
         int answer = 0;
         
         Arrays.sort(people);
-        
-        int index = 0;
-        
-        for (int i = people.length - 1; i >= index; i--) {
-            if (people[i] + people[index] <= limit) {
-                index++;
-                answer++;
+        int lo = 0;
+        int hi = people.length - 1;
+
+        while (lo < hi) {
+            int sum = people[hi];
+            
+            if (lo != hi && sum + people[lo] <= limit) {
+                sum += people[lo++];
             }
             
-            else {
-                answer++;
-            }
+            hi--;
+            answer++;
         }
-
+        
+        if (hi == lo) answer++;
         return answer;
     }
 }
