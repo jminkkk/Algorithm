@@ -1,70 +1,96 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static boolean visited[];
-    static int N, M, V;
+    static BufferedReader br;
+    static BufferedWriter bw;
 
-    static int[][] node;
+    public static void main(String[] args) throws Exception {
+        new Main().solution();
+    }
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] str = br.readLine().split(" ");
+    public void solution() throws Exception {
+        br = new BufferedReader(new InputStreamReader(System.in));
+//        br = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/java/BOJ_1260/input.txt")));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        N = Integer.parseInt(str[0]); // 정점의 개수 N
-        M = Integer.parseInt(str[1]); // 간선의 개수 M
-        V = Integer.parseInt(str[2]); //  시작 번호 V
+        String[] first = br.readLine().split(" ");
+        int N = Integer.parseInt(first[0]);
+        int M = Integer.parseInt(first[1]);
+        int V = Integer.parseInt(first[2]);
 
-        visited = new boolean[N + 1];
-        node = new int[N + 1][N + 1];
+        // 1. 연결 상태 표현하기 O(M)
+        boolean[][] connected = new boolean[N + 1][N + 1];
 
         for (int i = 0; i < M; i++) {
-            String[] nodeStr = br.readLine().split(" ");
-            int a = Integer.parseInt(nodeStr[0]);
-            int b = Integer.parseInt(nodeStr[1]);
+            String[] second = br.readLine().split(" ");
+            int a = Integer.parseInt(second[0]);
+            int b = Integer.parseInt(second[1]);
 
-            node[a][b] = node[b][a] = 1;
+            connected[a][b] = true;
+            connected[b][a] = true;
         }
 
-        // DFS - 재귀
-        DFS(V); // 방문할 인덱스, 이어진 노드들(정렬됨), 이동할 인덱스가 몇번째로 작은 인덱스
-        Arrays.fill(visited, false); // visited 배열 초기화
-        sb.append("\n");
-        // BFS - 스택
-        BFS(V);
+        List<Integer> dfs = dfs(V, connected);
+        List<Integer> bfs = bfs(V, connected);
 
-        System.out.println(sb);
+        String dfsStr = dfs.stream().map(Object::toString).collect(Collectors.joining(" "));
+        String bfsStr = bfs.stream().map(Object::toString).collect(Collectors.joining(" "));
+
+        bw.write(dfsStr + "\n");
+        bw.write(bfsStr + "\n");
+
+        bw.flush();
+        bw.close();
+        br.close();
     }
 
-    public static void DFS(int index) {
-        visited[index] = true; // 방문 처리
-        sb.append(index + " ");
+    public List<Integer> dfs(int cur, boolean[][] connected) {
+        List<Integer> path =  new ArrayList<>();
+        boolean[] visited = new boolean[connected.length];
 
-        for (int i = 0; i <= N; i++) {
-            if (node[index][i] == 1 && !visited[i]) {
-                DFS(i);
-            }
+        recursion(cur,  connected, visited, path);
+
+        return path;
+    }
+
+    public void recursion(int cur, boolean[][] connected, boolean[] visited, List<Integer> path) {
+        visited[cur] = true;
+        path.add(cur);
+
+        for (int i =0; i < connected.length; i++) {
+            if (i == cur) continue;
+            if (visited[i]) continue;
+            if (!connected[cur][i]) continue;
+
+            recursion(i, connected, visited, path);
         }
     }
 
-    public static void BFS(int index) {
+    public List<Integer> bfs(int cur, boolean[][] connected) {
+        List<Integer> path =  new ArrayList<>();
         Queue<Integer> queue = new LinkedList<>();
-        queue.add(index);
-        visited[index] = true;
+        boolean[] visited = new boolean[connected.length + 1];
 
+        queue.offer(cur);
+        visited[cur] = true;
+        
         while (!queue.isEmpty()) {
-            index = queue.poll();
-            sb.append(index + " ");
+            int now = queue.poll();
+            path.add(now);
 
-            for (int i = 0; i <= N; i++) {
-                if (node[index][i] == 1 && !visited[i]) {
-                    visited[i] = true;
-                    queue.add(i);
-                }
+            for (int i =0; i < connected.length; i++) {
+                if (i == now) continue;
+                if (visited[i]) continue;
+                if (!connected[now][i]) continue;
+
+                visited[i] = true;
+                queue.offer(i);
             }
         }
+
+        return path;
     }
 }
+
