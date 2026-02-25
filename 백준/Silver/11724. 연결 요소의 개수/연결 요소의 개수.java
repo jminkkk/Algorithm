@@ -1,54 +1,74 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int N, M;
-    static int[][] node;
+    static BufferedReader br;
+    static BufferedWriter bw;
+    static StringTokenizer st;
 
-    static boolean[] visited;
-    static int answer;
-
-    public static void main(String[] args) throws IOException {
-        // 방향 없는 그래프가 주어졌을 때,
-        // 연결 요소 (Connected Component)의 개수를 구하는 프로그램
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] strArr = br.readLine().split(" ");
-        N = Integer.parseInt(strArr[0]);
-        M = Integer.parseInt(strArr[1]);
-
-        answer = 0;
-
-        node = new int[N + 1][N + 1];
-
-        // 정점의 개수 N, 간선의 개수 M
-        for (int i = 0; i < M; i++) {
-            String[] str = br.readLine().split(" ");
-            int a = Integer.parseInt(str[0]);
-            int b = Integer.parseInt(str[1]);
-
-            node[a][b] = node[b][a] = 1;
-        }
-
-        visited = new boolean[N + 1];
-
-        for (int i = 1; i <= N; i++) {
-            if (!visited[i]) {
-                DFS(i);
-                answer++;
-            }
-        }
-
-        System.out.println(answer);
+    public static void main(String[] args) throws Exception {
+        new Main().solution();
     }
 
-    private static void DFS(int start) {
-        visited[start] = true;
+    public void solution() throws Exception {
+        br = new BufferedReader(new InputStreamReader(System.in));
+//        br = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/java/BOJ_11724/input.txt")));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        for (int i = 1; i <= N; i++) {
-            if (node[start][i] == 1 && !visited[i]) {
-                DFS(i);
-            }
+        String[] input = br.readLine().split(" ");
+        int n = Integer.parseInt(input[0]);
+        int m = Integer.parseInt(input[1]);
+
+        boolean[][] arr = new boolean[n + 1][n + 1];
+        boolean[] visited = new boolean[n + 1];
+
+        for (int i = 0; i < m; i++) {
+            input = br.readLine().split(" ");
+            int a = Integer.parseInt(input[0]);
+            int b = Integer.parseInt(input[1]);
+            arr[a][b] = true;
+            arr[b][a] = true;
+        }
+
+        int cnt = 0;
+        for (int i = 1; i <= n; i++) {
+            if (visited[i]) continue;
+
+            cnt++;
+            dfs(i, visited, arr);
+        }
+
+        bw.write(String.valueOf(cnt));
+        bw.flush();
+        bw.close();
+        br.close();
+    }
+
+    public void dfs(int i, boolean[] visited, boolean[][] arr) {
+        visited[i] = true;
+
+        for (int j = 0; j < arr[i].length; j++) {
+            if (i == j || !arr[i][j] || visited[j]) continue;
+
+            dfs(j, visited, arr);
         }
     }
 }
+
+
+//main
+//	for 1...m
+//		arr[a][b] = true;
+//		arr[b][a] = true;
+//
+//	for 1...n
+//		if (visited[i]) continue;
+//
+//		cnt++;
+//		dfs(i, visited, arr);
+//
+//dfs
+//	for 1...n
+//		if (i == cur || arr[i][cur] || visited[i]) continue;
+//
+//		dfs(i, visited, arr);
