@@ -1,36 +1,43 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
 
-class Main {
-    static int n, m;
+import java.io.*;
+import java.util.*;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] str = br.readLine().split(" ");
-        n = Integer.parseInt(str[0]);
+public class Main {
+    static BufferedReader br;
+    static BufferedWriter bw;
+    static StringTokenizer st;
 
-        str = br.readLine().split(" ");
-        int[] arr = new int[n];
+    public static void main(String[] args) throws Exception {
+        new Main().solution();
+    }
+
+    public void solution() throws Exception {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        //br = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/java/BOJ_10816/input.txt")));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+
+        int n = Integer.parseInt(br.readLine());
+
         Map<Integer, Integer> map = new HashMap<>();
+        String[] arr = br.readLine().split(" ");
         for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(str[i]);
-            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
+            int num = Integer.parseInt(arr[i]);
+            map.put(num, map.getOrDefault(num, 0) + 1);
         }
 
-        str = br.readLine().split(" ");
-        m = Integer.parseInt(str[0]);
-
         StringBuilder sb = new StringBuilder();
-        str = br.readLine().split(" ");
+        int m = Integer.parseInt(br.readLine());
+
+        arr = br.readLine().split(" ");
         for (int i = 0; i < m; i++) {
-            int num = Integer.parseInt(str[i]);
+            int num = Integer.parseInt(arr[i]);
             sb.append(map.getOrDefault(num, 0)).append(" ");
         }
 
         System.out.println(sb.toString());
+        bw.flush();
+        bw.close();
+        br.close();
     }
 }
