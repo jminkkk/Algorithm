@@ -1,11 +1,6 @@
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.awt.Point;
+import java.io.*;
+import java.util.*;
 
 public class Main {
     static BufferedReader br;
@@ -21,27 +16,23 @@ public class Main {
         //br = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/java/BOJ_16953/input.txt")));
         bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        String[] s = br.readLine().split(" ");
-        int a = Integer.parseInt(s[0]);
-        int b = Integer.parseInt(s[1]);
+        String[] arr = br.readLine().split(" ");
+        int a = Integer.parseInt(arr[0]);
+        int b = Integer.parseInt(arr[1]);
+        
+        Queue<Point> q = new LinkedList<>();
+        q.add(new Point(a, 0));
+        while(!q.isEmpty()) {
+            Point p = q.poll();
 
-        Queue<Node> q = new LinkedList<>();
-        q.offer(new Node(a, 0));
-
-        while (!q.isEmpty()) {
-            Node nd = q.poll();
-            if (nd.value == b) {
-                System.out.println(nd.cnt + 1);
+            if (p.x == b) {
+                System.out.println(p.y + 1);
                 return;
             }
+            if (p.x > b) continue;
 
-            if (nd.value * 2 <= b) {
-                q.offer(new Node(nd.value * 2, nd.cnt + 1));
-            }
-
-            if (nd.value * 10 + 1 <= b) {
-                q.offer(new Node(nd.value * 10 + 1, nd.cnt + 1));
-            }
+            if ((long) p.x * 2 <= b) q.add(new Point(p.x * 2, p.y + 1));
+            if ((long) p.x * 10 + 1 <= b) q.add(new Point(p.x * 10 + 1, p.y + 1));
         }
 
         System.out.println(-1);
@@ -51,32 +42,3 @@ public class Main {
         br.close();
     }
 }
-
-class Node {
-    long value;
-    long cnt;
-
-    public Node(long value, long cnt) {
-        this.value = value;
-        this.cnt = cnt;
-    }
-}
-//bfs
-//	Queue<Node> q = new LinkedList<>();
-//	q.offer(new Node(a, 0));
-//	while (!q.isEmpty()) {
-//		Node nd = q.poll();
-//		if (nd.value == b) {
-//			System.out.println(nd.cnt);
-//			return;
-//		}
-//
-//		if (nd.value * 2 <= b) {
-//			q.offer(new Node(nd.value * 2, nd.cnt + 1);
-//		} else if (nd.value * 10 + 1 <= b) {
-//			q.offer(new Node(nd.value * 10 + 1, nd.cnt + 1);
-//		}
-//	}
-//
-//	System.out.println(-1);
-//430,000,000 503,270,511
