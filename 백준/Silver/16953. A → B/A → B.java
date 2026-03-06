@@ -1,6 +1,9 @@
-import java.awt.Point;
-import java.io.*;
-import java.util.*;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
 
 public class Main {
     static BufferedReader br;
@@ -19,23 +22,25 @@ public class Main {
         String[] arr = br.readLine().split(" ");
         int a = Integer.parseInt(arr[0]);
         int b = Integer.parseInt(arr[1]);
-        
-        Queue<Point> q = new LinkedList<>();
-        q.add(new Point(a, 0));
-        while(!q.isEmpty()) {
-            Point p = q.poll();
+        int cnt = 1;
 
-            if (p.x == b) {
-                System.out.println(p.y + 1);
+        while (a < b) {
+            if (b % 2 == 0) {
+                b /= 2;
+            } else if ((b - 1) % 10 == 0) {
+                b = (b - 1) / 10;
+            } else {
+                System.out.println(-1);
                 return;
             }
-            if (p.x > b) continue;
+            cnt++;
+        } // 2 172
 
-            if ((long) p.x * 2 <= b) q.add(new Point(p.x * 2, p.y + 1));
-            if ((long) p.x * 10 + 1 <= b) q.add(new Point(p.x * 10 + 1, p.y + 1));
+        if (a == b) {
+            System.out.println(cnt);
+        } else {
+            System.out.println(-1);
         }
-
-        System.out.println(-1);
 
         bw.flush();
         bw.close();
