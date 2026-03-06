@@ -23,45 +23,40 @@ public class Main {
 
         String[] str = br.readLine().split(" ");
         int n = Integer.parseInt(str[0]);
-        int k = Integer.parseInt(str[1]);
+        int m = Integer.parseInt(str[1]);
 
-        if (n >= k) {
-            System.out.println(n - k);
-            System.out.println(1);
-            return;
-        }
-
-        int[] depths = new int[100_000 + 1];
-        int[] count = new int[100_000 + 1];
-
-        int cnt = 0;
+        int[] cnt = new int[100_001]; // 각 위치에 도달할 때 최소 연산으로 온 경우의 수
+        int[] opers = new int[100_001]; // 각 위치에 도달할 때 최소 연산 수
+        boolean[] visited = new boolean[100_001];
 
         Queue<Integer> q = new LinkedList<>();
         q.add(n);
-
-        for (int p = 0; p <= 100_000; p++) depths[p] = -1;
-        depths[n] = 0;
-        count[n] = 1;
+        cnt[n] = 1;
+        opers[n] = 0;
+        visited[n] = true;
 
         while (!q.isEmpty()) {
-            int p = q.poll();
+            int nw = q.poll();
 
-            int[] next = new int[]{p + 1, p - 1, p * 2};
-            for (int d : next) {
-                if (d < 0 || d > 100_000) continue;
+            int[] next = new int[]{nw + 1, nw - 1, nw * 2};
 
-                if (depths[d] == -1) {
-                    depths[d] = depths[p] + 1;
-                    count[d] = count[p];
-                    q.add(d);
-                } else if (depths[d] == depths[p] + 1) {
-                    count[d] += count[p];
+            for (int i = 0; i < next.length; i++) {
+                if (next[i] < 0 || next[i] > 100_000)
+                    continue;
+
+                if (!visited[next[i]]) {
+                    q.add(next[i]);
+                    cnt[next[i]] += cnt[nw];
+                    visited[next[i]] = true;
+                    opers[next[i]] = opers[nw] + 1;
+                } else if (opers[nw] + 1 == opers[next[i]]) {
+                    cnt[next[i]] += cnt[nw];
                 }
             }
         }
 
-        System.out.println(depths[k]);
-        System.out.println(count[k]);
+        System.out.println(opers[m]);
+        System.out.println(cnt[m]);
 
         bw.flush();
         bw.close();
