@@ -18,23 +18,17 @@ public class Main {
         //br = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/java/BOJ_1300/input.txt")));
         bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-
         int n = Integer.parseInt(br.readLine());
         int k = Integer.parseInt(br.readLine());
 
-        if (k  == 1) {
-            System.out.println(1);
-            return;
-        }
+        long lo = 0;
+        long hi = (long) n * n; // 10^10
 
-        long lo = 1;
-        long hi = (long) n * n;
-
-        while (lo + 1 < hi) { // nnnny
+        while (lo + 1 < hi) {
             long mid = (lo + hi) / 2;
 
-            if (canFind(n, mid, k)) {
-                hi = mid;
+            if (isMore(mid, k, n)) {
+                hi = mid;// nnny
             } else {
                 lo = mid;
             }
@@ -46,12 +40,15 @@ public class Main {
         br.close();
     }
 
-    public boolean canFind(int n, long x, int k) {
+    public boolean isMore(long now, long k, long n) {
         long cnt = 0;
         for (int i = 1; i <= n; i++) {
-            cnt += Math.min(x/i, n);
+            cnt += Math.min(n, now / i);
+            if (cnt >= k) {
+                return true;
+            }
         }
-
         return cnt >= k;
     }
+
 }
