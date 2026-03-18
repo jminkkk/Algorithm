@@ -24,36 +24,35 @@ public class Main {
         int m = Integer.parseInt(s[1]);
         int[] arr = new int[n];
 
-        int max = 0;
+        long max = 0;
         for (int i = 0;  i < n; i++) {
             arr[i] = Integer.parseInt(br.readLine());
             max = Math.max(max, arr[i]);
         }
 
         long lo = 0;
-        long hi = (long) m * max;
-        while (lo + 1 < hi) { // nnny
-            long mid = (lo + hi) / 2;
+        long hi = max * m;
 
-            if (canPermit(mid, arr, m)) {
-                hi = mid;
-            } else {
-                lo = mid;
-            }
+        while (lo + 1 < hi) {
+            long mid = (lo + hi) / 2;
+            if (canAllPermit(mid, m, arr)) hi = mid;
+            else lo = mid;
         }
 
-        System.out.println(hi);
+        System.out.println(hi); // nnny
+
         bw.flush();
         bw.close();
         br.close();
     }
 
-    public boolean canPermit(long mid, int[] arr, long m) {
+    public boolean canAllPermit(long mid, long m, int[] arr) {
         long cnt = 0;
-        for (int num : arr) {
+        for (int num: arr) {
             cnt += mid / num;
             if (cnt >= m) return true;
         }
+
         return cnt >= m;
     }
 }
