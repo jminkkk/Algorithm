@@ -1,41 +1,56 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.*;
 
-class Main {
-    static int n;
+public class Main {
+    static BufferedReader br;
+    static BufferedWriter bw;
+    static StringTokenizer st;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws Exception {
+        new Main().solution();
+    }
+
+    public void solution() throws Exception {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        //br = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/java//input.txt")));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
         String[] str = br.readLine().split(" ");
-        n = Integer.parseInt(str[0]);
-        int m = Integer.parseInt(str[1]);
+        int n = Integer.parseInt(str[0]);
+        int s = Integer.parseInt(str[1]);
 
-        int[] arr = new int[n];
+        int[] arr = new int[n + 1];
         int[] sum = new int[n + 1];
 
         str = br.readLine().split(" ");
-        sum[0] = 0;
         for (int i = 1; i <= n; i++) {
-            arr[i - 1] = Integer.parseInt(str[i - 1]);
-            sum[i] = sum[i - 1] + arr[i - 1];
+            arr[i] = Integer.parseInt(str[i - 1]);
+            sum[i] = sum[i - 1] + arr[i];
         }
 
-        int count = 0;
-        int start = 0, end = 0;
+        int start = 0;
+        int end = 1;
 
-        while (end <= n) {
-            int now = sum[end] - sum[start];
-            if (now == m) {
-                count++;
-                start++;
-            } else if (now < m){
+        int cnt = 0;
+        while (start <= end && end <= n) {
+            if (sum[end] - sum[start] < s) {
                 end++;
-            } else {
-                start++;
+                continue;
             }
+
+            if (sum[end] - sum[start] > s) {
+                start++;
+                continue;
+            }
+
+            cnt++;
+            end++;
         }
 
-        System.out.println(count);
+        System.out.println(cnt);
+
+        bw.flush();
+        bw.close();
+        br.close();
     }
 }
