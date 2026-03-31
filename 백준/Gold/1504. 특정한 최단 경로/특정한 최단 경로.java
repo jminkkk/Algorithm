@@ -91,4 +91,3 @@ class Node implements Comparable<Node> {
         return this.cost - o.cost;
     }
 }
-
