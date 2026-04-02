@@ -1,10 +1,5 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
     static BufferedReader br;
@@ -17,57 +12,57 @@ public class Main {
 
     public void solution() throws Exception {
         br = new BufferedReader(new InputStreamReader(System.in));
-        //br = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/java/BOJ_12851/input.txt")));
+        //br = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/java/BOJ_13549/input.txt")));
         bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         String[] str = br.readLine().split(" ");
         int n = Integer.parseInt(str[0]);
-        int m = Integer.parseInt(str[1]);
+        int k = Integer.parseInt(str[1]);
 
-        int dis[] = new int[100_001]; // 최단 연산 수
-        int cnt[] = new int[100_001]; // 최단 연산 경로 수
-
-        for (int i = 0; i < 100_001; i++) {
-            dis[i] = -1;
+        int[] dist = new int[100_001];
+        for (int i = 0; i <= 100_000; i++) {
+            dist[i] = Integer.MAX_VALUE;
         }
 
-        Queue<Integer> q = new LinkedList<>();
-        q.add(n);
-        dis[n] = 0;
-        cnt[n] = 1;
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        dist[n] = 0;
+        pq.add(new Node(n, 0));
 
-        while (!q.isEmpty()) {
-            int nd = q.poll();
-            int[] nw = new int[]{nd - 1, nd + 1, nd * 2};
-            int[] gap = new int[]{1, 1, 0};
+        while (!pq.isEmpty()) {
+            Node nd = pq.poll();
 
-            for (int i = 0; i < 3; i++) {
-                int next = nw[i];
-                int gapNext = gap[i];
-                if (next < 0 || next > 100_000) {
-                    continue;
-                }
+            int[][] nextArr = {{nd.pos + 1, nd.cost + 1}
+                    , {nd.pos - 1, nd.cost + 1}
+                    , {nd.pos * 2, nd.cost}};
 
-                if (dis[next] == -1) { // 최초 방문
-                    if (i == 2) dis[next] = dis[nd];
-                    else dis[next] = dis[nd] + 1;
+            for (int[] next: nextArr) {
+                if (next[0] < 0 || next[0] > 100_000) continue;
+                if (next[1] >= dist[next[0]]) continue;
 
-                    cnt[next] = cnt[nd];
-                    q.add(next);
-                } else if (dis[next] == dis[nd] + gapNext) { // 방문은 했으나, 최단 추가
-                    dis[next] = dis[nd] + gapNext;
-                    cnt[next] += cnt[nd];
-                } else if (dis[next] > dis[nd] + gapNext) { // 방문은 했으나, 지금이 새로운 최단
-                    dis[next] = dis[nd] + gapNext;
-                    cnt[next] = cnt[nd];
-                }
+                pq.add(new Node(next[0], next[1]));
+                dist[next[0]] = next[1];
             }
         }
 
-        System.out.println(dis[m]);
+        System.out.println(dist[k]);
 
         bw.flush();
         bw.close();
         br.close();
+    }
+}
+
+class Node implements Comparable<Node> {
+    int pos;
+    int cost;
+
+    public Node(int pos, int cost) {
+        this.pos = pos;
+        this.cost = cost;
+    }
+
+    @Override
+    public int compareTo(Node o) {
+        return Integer.compare(this.cost, o.cost);
     }
 }
