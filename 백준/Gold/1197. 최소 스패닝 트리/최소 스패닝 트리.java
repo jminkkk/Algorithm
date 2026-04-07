@@ -10,57 +10,71 @@ public class Main {
         new Main().solution();
     }
 
-    public static int find(int[] parent, int i) {
-        if (parent[i] != i) parent[i] = find(parent, parent[i]); // 루트찾기
-        return parent[i];
-    } // 부모찾기
-
-    public static boolean union(int[] parent, int a, int b) {
-        int rootA = find(parent, a);
-        int rootB = find(parent, b);
-        if (rootA == rootB) return false; // 사이클
-        parent[rootA] = rootB; // 부모가 다르면 나에게 합치기
-        return true;
-    }
     public void solution() throws Exception {
         br = new BufferedReader(new InputStreamReader(System.in));
-        //br = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/java//input.txt")));
+        //br = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/java/BOJ_1197/input.txt")));
         bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
 
         String[] str = br.readLine().split(" ");
         int v = Integer.parseInt(str[0]);
         int e = Integer.parseInt(str[1]);
 
-        int[] parent = new int[v];
-        for (int i = 0; i < v; i++) parent[i] = i;
-
-        int[][] edges = new int[e][3];
+        List<Node>[] graph = new List[v + 1];
+        for (int i = 0; i <= v; i++) graph[i] = new ArrayList<>();
+        
         for (int i = 0; i < e; i++) {
             str = br.readLine().split(" ");
-            edges[i][0] = Integer.parseInt(str[0]) - 1;
-            edges[i][1] = Integer.parseInt(str[1]) - 1;
-            edges[i][2] = Integer.parseInt(str[2]);
+            int a = Integer.parseInt(str[0]);
+            int b = Integer.parseInt(str[1]);
+            int cost = Integer.parseInt(str[2]);
+            graph[a].add(new Node(b, cost));
+            graph[b].add(new Node(a, cost));
         }
 
-        Arrays.sort(edges, (a, b) -> a[2] - b[2]);
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        boolean[] visited = new boolean[v + 1];
 
-        List<int[]> mst = new ArrayList<>();
-        int dist = 0;
-        for (int[] edge: edges) {
-            if (!union(parent, edge[0], edge[1])) continue;
+        Set<Integer> mst = new HashSet<>();
+        pq.add(new Node(1, 0));
 
-            mst.add(edge);
-            dist += edge[2];
+        int sum = 0;
+        while (!pq.isEmpty()) {
+            Node node = pq.poll();
 
-            if (mst.size() == v - 1) break;
+            if (visited[node.num]) continue;
+            
+            visited[node.num] = true;
+            sum += node.cost;
+            mst.add(node.num);
+
+            if (mst.size() == v) break;
+
+            for (Node next: graph[node.num]) {
+                if (visited[next.num]) continue;
+                pq.add(next);
+            }
         }
 
-        System.out.println(dist);
+        System.out.println(sum);
 
 
         bw.flush();
         bw.close();
         br.close();
+    }
+}
+
+class Node implements Comparable<Node> {
+    int num;
+    int cost;
+
+    public Node(int num, int cost) {
+        this.num = num;
+        this.cost = cost;
+    }
+
+    @Override
+    public int compareTo(Node o) {
+        return this.cost - o.cost;
     }
 }
