@@ -1,39 +1,44 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.io.*;
+import java.util.*;
 
+public class Main {
+    static BufferedReader br;
+    static BufferedWriter bw;
+    static StringTokenizer st;
 
-class Main {
-    static int[] dx = {0, 1, 0, -1};
-    static int[] dy = {1, 0, -1, 0};
-    static int max = 0;
-    static int n, m;
-    static int[][] dp;
+    public static void main(String[] args) throws Exception {
+        new Main().solution();
+    }
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] str = br.readLine().split(" ");
-        n = Integer.parseInt(str[0]);
+    public void solution() throws Exception {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        //br = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/java/BOJ_11053/input.txt")));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
+        int n = Integer.parseInt(br.readLine());
+
+        int[] arr = new int[n];
         int[] dp = new int[n];
-        Arrays.fill(dp, 1);
 
-        str = br.readLine().split(" ");
-        for (int i = 1; i < n; i++) {
-            for (int j = 0; j < i; j++) {
-                int now = Integer.parseInt(str[i]);
-                int before = Integer.parseInt(str[j]);
-                if (now > before) {
-                    dp[i] = Math.max(dp[i], dp[j] + 1);
-                }
-            }
-        }
-
+        String[] str = br.readLine().split(" ");
         for (int i = 0; i < n; i++) {
-            max = Math.max(max, dp[i]);
+            arr[i] = Integer.parseInt(str[i]);
         }
-        System.out.println(max);
+
+        int idx = 0;
+        for (int i = 0; i < n; i++) {
+            int now = Arrays.binarySearch(dp, 0, idx, arr[i]); // lower_bound
+            if (now < 0) now = -(now + 1);
+
+            dp[now] = arr[i];
+
+            if (now == idx) idx++;
+        }
+
+        System.out.println(idx);
+
+        bw.flush();
+        bw.close();
+        br.close();
     }
 }
-
