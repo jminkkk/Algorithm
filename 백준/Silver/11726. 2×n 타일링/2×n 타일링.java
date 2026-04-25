@@ -1,29 +1,32 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
+import java.io.*;
+import java.util.*;
 
-class Main {
-    static int[] dx = {0, 1, 0, -1};
-    static int[] dy = {1, 0, -1, 0};
-    static int max = 0;
-    static int n, m;
-    static int[][] dp;
+public class Main {
+    static BufferedReader br;
+    static BufferedWriter bw;
+    static StringTokenizer st;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] str = br.readLine().split(" ");
-        n = Integer.parseInt(str[0]);
+    public static void main(String[] args) throws Exception {
+        new Main().solution();
+    }
 
-        int[] dp = new int[1001]; // dp[i] = i타일
-        dp[0] = 0;
-        dp[1] = 1;
-        dp[2] = 2;
-        dp[3] = 3;
-        for (int i = 4; i <= n; i++) {
-            dp[i] = ((dp[i - 1] % 10_007) + (dp[i - 2] % 10_007)) % 10_007;
+    public void solution() throws Exception {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        //br = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/java/BOJ_11726/input.txt")));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        int n = Integer.parseInt(br.readLine());int[] dp = new int[n + 1];
+
+        dp[0] = 1;
+       dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = (dp[i - 1] % 10_007 + dp[i - 2] % 10_007) % 10_007;
         }
 
         System.out.println(dp[n]);
+        bw.flush();
+        bw.close();
+        br.close();
     }
 }
