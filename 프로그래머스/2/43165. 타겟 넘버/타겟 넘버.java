@@ -1,26 +1,19 @@
-
 class Solution {
-    static int t, ans = 0;
-    static int[] nums;
-
+    private static int answer = 0;
     public int solution(int[] numbers, int target) {
-        t = target;
-        nums = numbers;
-        
-        dfs(0, numbers[0]);
-        dfs(0, -1 * numbers[0]);
-
-        return ans;
+        dfs(numbers, target, numbers[0], 1);
+        dfs(numbers, target, numbers[0] * -1 , 1);
+            
+        return answer;
     }
-
-    // 깊이 우선 탐색
-    public void dfs(int depth, int sum){
-        if(depth == nums.length - 1) { // 마지막 노드 까지 탐색한 경우
-            if(t == sum) ans++;
+    
+    public void dfs(int[] numbers, int target, int sum, int idx) {
+        if (idx == numbers.length) {
+            if (sum == target) answer++;
             return;
-        } 
+        }
         
-        dfs(depth + 1, sum + nums[depth + 1]);
-        dfs(depth + 1, sum - nums[depth + 1]);
+        dfs(numbers, target, sum + numbers[idx], idx + 1);
+        dfs(numbers, target, sum - numbers[idx], idx + 1);
     }
 }
