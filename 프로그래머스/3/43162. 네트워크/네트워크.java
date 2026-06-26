@@ -1,33 +1,34 @@
 import java.util.*;
 
 class Solution {
-    
     public int solution(int n, int[][] computers) {
-        boolean[] visited = new boolean[computers.length];
         int answer = 0;
+        boolean[] visited = new boolean[n];
         
         for (int i = 0; i < n; i++) {
             if (visited[i]) continue;
-            
+
+            bfs(i, visited, computers);
             answer++;
-            visited[i] = true;
-            Queue<Integer> q = new LinkedList<>();
-            q.add(i);
+        }
+        return answer;
+    }
+    
+    public void bfs(int cur, boolean[] visited, int[][] computers) {
+        Queue<Integer> q = new LinkedList<>();
+        q.add(cur);
+        visited[cur] = true;
+        
+        while (!q.isEmpty()) {
+            int now = q.poll();
             
-            while (!q.isEmpty()) {
-                int now = q.poll();
-                for (int j = i + 1; j < n; j++) {
-                    // if (j == i) continue;
-                    if (visited[j]) continue;
-                    
-                    if (computers[now][j] == 1) {
-                        q.add(j);
-                        visited[j] = true;
-                    }
-                }
+            for (int i = 0; i < visited.length; i++) {
+                if (visited[i] || i == now) continue;
+                if (computers[now][i] == 0) continue;
+                
+                visited[i] = true;
+                q.add(i);
             }
         }
-        
-        return answer;
     }
 }
