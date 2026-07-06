@@ -1,29 +1,32 @@
 class Solution {
     public int solution(int m, int n, int[][] puddles) {
-        int[][] dp = new int[n + 1][m + 1];
-        boolean[][] cantGo = new boolean[n + 1][m + 1];
+        int answer = 0;
         
-        for (int[] puddle: puddles) {
-	        int r = puddle[1];
-	        int c = puddle[0];
-	        cantGo[r][c] = true;
-	    }
-	      
-        dp[1][1] = 1;
+        int[][] dp = new int[n][m];
+        boolean[][] isPuddle = new boolean[n][m];
+        for (int[] p: puddles) {
+            isPuddle[p[1] - 1][p[0] - 1] = true;
+        }        
         
-	    for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= m; j++) {
-                if (i == 1 && j == 1) continue;
-                if (cantGo[i][j]) continue;
+        dp[0][0] = 0;
+        if (n > 0 && !isPuddle[1][0]) dp[1][0] = 1;
+        if (m > 0 && !isPuddle[0][1]) dp[0][1] = 1;
 
-			    if (cantGo[i - 1][j] && cantGo[i][j - 1]) {
-				    cantGo[i][j] = true;
-				    continue;
-				}
-				dp[i][j] = (dp[i - 1][j] + dp[i][j - 1]) % 1_000_000_007;
-		      }
-	      }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (isPuddle[i][j]) {
+                    dp[i][j] = 0;
+                    continue;
+                }
+                
+                // 위에서 아래로
+                if (i != 0) dp[i][j] = (dp[i - 1][j] + dp[i][j]) % 1_000_000_007;
+                
+                // ->
+                if (j != 0) dp[i][j] = (dp[i][j - 1] + dp[i][j]) % 1_000_000_007;
+            }
+        }
         
-        return dp[n][m];
+        return dp[n - 1][m - 1];
     }
 }
