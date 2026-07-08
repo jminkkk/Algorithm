@@ -2,16 +2,19 @@ import java.util.*;
 
 class Solution {
     public int solution(int[][] routes) {
+        Arrays.sort(routes, (a1, a2) -> a1[1] - a2[1]);
+        int left = routes[0][0];
+        int right = routes[0][1];
         int answer = 1;
-        
-        Arrays.sort(routes, (o1, o2) -> { return o1[1] - o2[1]; });
-        
-        int idx = 0; // 현재 카메라 둔 위치의 경로 인덱스
-        for (int i = 1; i < routes.length; i++) {
-            if (routes[i][0] <= routes[idx][1]) continue;
             
+        for (int[] r: routes) {
+            // System.out.println(left + " " + right);
+            // System.out.println(r[0] + " " + r[1]);
+            if (left <= r[1] && right >= r[0]) continue;
+            
+            left = r[0];
+            right = r[1];
             answer++;
-            idx = i;
         }
         
         return answer;
