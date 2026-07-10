@@ -2,70 +2,81 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String[] genres, int[] plays) {
-        // 0. map 2개 선언
-            // 1. 장르별 전체 재생 수 합
-            // 2. 장르별 재생 수 높은 순 노래 pq
-        Map<String, Integer> sum = new HashMap<>();
-        Map<String, PriorityQueue<Node>> cnt = new HashMap<>();
-        for (int i = 0; i < genres.length; i++) {
-            String curGn = genres[i];
-            int curPl = plays[i];
-            sum.put(curGn, sum.getOrDefault(curGn, 0) + curPl);
+        int len = genres.length;
+        // 1. 가장 많이 재생된 장르
+        Map<String, Integer> totalCnt = new HashMap<>();
+        
+        // 2. 장르별 재생 노래
+        Map<String, PriorityQueue<Music>> playsByGenre = new HashMap<>();
+        
+        for (int i = 0; i < len; i++) {
+            String genre = genres[i];
+            int playCnt = plays[i];
             
-            PriorityQueue<Node> pq = cnt.getOrDefault(curGn, new PriorityQueue<Node>());
-            pq.add(new Node(i, curPl));
-            cnt.put(curGn, pq);
+            int newSum =  totalCnt.getOrDefault(genre, 0) + playCnt;
+            totalCnt.put(genre, newSum);
+            
+            PriorityQueue<Music> pq = playsByGenre.getOrDefault(genre, new PriorityQueue<>());
+            Music newMusic = new Music(i, playCnt);
+            pq.add(newMusic);
+            playsByGenre.put(genre, pq);
+        }
+
+        PriorityQueue<Genre> genrePq = new PriorityQueue<>();
+        for (String key : totalCnt.keySet()) {
+            Genre genre = new Genre(key, totalCnt.get(key));
+            genrePq.add(genre);
         }
         
-        PriorityQueue<Node2> sumQ = new PriorityQueue<>();
-        for (Map.Entry entry: sum.entrySet()) {            
-            String gerne = (String) entry.getKey();
-            int totalSum = (Integer) entry.getValue();
-            sumQ.add(new Node2(gerne, totalSum));
+        
+        List<Integer> idx = new ArrayList<>();
+        while (!genrePq.isEmpty()) {
+            Genre genre = genrePq.poll();
+            PriorityQueue<Music> pq = playsByGenre.get(genre.name);
+            
+            if (!pq.isEmpty()) {
+                Music music = pq.poll();
+                idx.add(music.idx); 
+            }
+            if (!pq.isEmpty()) {
+                Music music = pq.poll();
+                idx.add(music.idx); 
+            }
         }
         
-        List<Integer> list = new ArrayList<>();
-        int[] answer = new int[sumQ.size() * 2];
-        
-        while (!sumQ.isEmpty()) {
-            Node2 nd = sumQ.poll();
-            PriorityQueue<Node> pq = cnt.get(nd.gerne);
-            if (pq.size() >= 1) list.add(pq.poll().idx);
-            if (pq.size() >= 1) list.add(pq.poll().idx);
-        }
-        
-        answer = list.stream()
-            .mapToInt(Integer::intValue)
-            .toArray();
-        
+        int[] answer = idx.stream().mapToInt(i -> i).toArray();
+
         return answer;
     }
+    
 }
 
-class Node implements Comparable<Node> {
-    int idx;
-    int playCnt;
-    
-    Node(int idx, int playCnt) {
-        this.playCnt = playCnt;
-        this.idx = idx;
-    }
-    
-    public int compareTo(Node o) {
-        return o.playCnt - this.playCnt;
-    }
-}
-
-class Node2 implements Comparable<Node2> {
-    String gerne;
+class Genre implements Comparable<Genre> {
+    String name;
     int sum;
     
-    Node2(String gerne, int sum) {
-        this.gerne = gerne;
+    Genre(String name, int sum) {
+        this.name = name;
         this.sum = sum;
     }
     
-    public int compareTo(Node2 o) {
-        return o.sum - this.sum;
+    public int compareTo(Genre o) {        
+        return Integer.compare(o.sum, this.sum);
+    }
+}
+
+class Music implements Comparable<Music> {
+    int idx;
+    int cnt;
+    
+    Music(int idx, int cnt) {
+        this.idx = idx;
+        this.cnt = cnt;
+    }
+    
+    public int compareTo(Music o) {
+        if (this.cnt == o.cnt) return Integer.compare(this.idx, o.idx);
+        
+        return Integer.compare(o.cnt, this.cnt);
     }
 }
