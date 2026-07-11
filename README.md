@@ -20,8 +20,10 @@ This is a auto push repository for Baekjoon Online Judge created with [BaekjoonH
 |  |
 | ------- |
 | [0002-add-two-numbers](https://github.com/jminkkk/Algorithm/tree/master/0002-add-two-numbers) |
+| [0206-reverse-linked-list](https://github.com/jminkkk/Algorithm/tree/master/0206-reverse-linked-list) |
 ## Recursion
 |  |
 | ------- |
 | [0002-add-two-numbers](https://github.com/jminkkk/Algorithm/tree/master/0002-add-two-numbers) |
+| [0206-reverse-linked-list](https://github.com/jminkkk/Algorithm/tree/master/0206-reverse-linked-list) |
 <!---LeetCode Topics End-->
