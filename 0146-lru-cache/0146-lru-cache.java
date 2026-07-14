@@ -1,76 +1,86 @@
 class LRUCache {
-	Node head;
-	Node tail;
-	int capacity;
-	Map<Integer, Node> map;
-	
-	public LRUCache(int capacity) {
-		this.capacity = capacity;
-		this.map = new HashMap<>();
-		this.head = new Node(-1, -1);
-		this.tail = new Node(-1, -1);
-		head.next = tail;
-		tail.prev = head;
-	}
-	
-	class Node {
-		int key;
-		int value;
-		Node next;
-		Node prev;
-		
-		Node(int key, int value) {
-			this.key = key;
-			this.value = value;
-		}
-	}
 
-	public void put(int key, int value) {
-        Node newNode = new Node(key, value);
+    Map<Integer, Node> map;
+    int capacity;
+    Node head;
+    Node tail;
+
+    class Node {
+        int key;
+        int value;
+        Node prev;
+        Node next;
+
+        Node(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    public LRUCache(int capacity) {
+        this.map = new HashMap<>();
+        this.capacity = capacity;
+        head = new Node(-1, -1);
+        tail = new Node(-1, -1);
+        head.next = tail;
+        tail.prev = head;
+    }
+    
+    public int get(int key) {
+        // key가 존재하지 않는 경우 - -1 반환
+        if (!map.containsKey(key)) return -1;
+
+        // key가 존재하는 경우 - 기존 값 제거 및 신규로 앞에 추가
+        Node node = map.get(key);
+        remove(node);
+        addFront(node);
+        return node.value;
+    }
+    
+    public void put(int key, int value) {
+        Node node = new Node(key, value);
+        // 이미 존재하는 key인 경우, 기존 값 제거 및 신규로 앞에 추가
         if (map.containsKey(key)) {
             Node existing = map.get(key);
-            map.put(key, newNode);
-            removeNode(existing);
-            addFirst(newNode);
+            remove(existing);
+            addFront(node);
+            map.put(key, node);
             return;
         }
-		
-		if (map.size() == capacity) {
-            removeNode(tail.prev);
-		}
 
-		addFirst(newNode);
-	}
-	
-	public int get(int key) {
-		if (!map.containsKey(key)) {
-			return -1;
-		}
-		
-		// 캐시 히트
-		Node node = map.get(key);		
-        removeNode(node);
-        addFirst(node);
-        return node.value;
-	}
+        // 신규 key인 경우
+            // 용량이 차지 않은 경우 - 신규로 앞에 추가
+        if (map.size() < capacity) {
+            map.put(key, node);
+            addFront(node);
+            return;
+        }
 
-    private void addFirst(Node node) {
-        Node next = head.next;
-        node.prev = head;
-        head.next = node;
-        node.next = next;
-        next.prev = node;
-        map.put(node.key, node);
+            // 용량이 찬 경우 - 기존 가장 낮은 값 제거 및 신규로 앞에 추가
+        Node last = tail.prev;
+        remove(last);
+        map.remove(last.key);
+        addFront(node);
+        map.put(key, node);
     }
 
-    private void removeNode(Node node) {
-        map.remove(node.key);
-        Node next = node.next;
+    private void remove(Node node) {
         Node prev = node.prev;
-        next.prev = prev;
+        Node next = node.next;
         prev.next = next;
+        next.prev = prev;
+    }
+
+    private void addFront(Node node) {
+        Node next = head.next;
+        head.next = node;
+        node.prev = head;
+        next.prev = node;
+        node.next = next;
     }
 }
+
+
 /**
  * Your LRUCache object will be instantiated and called as such:
  * LRUCache obj = new LRUCache(capacity);
