@@ -81,4 +81,20 @@ This is a auto push repository for Baekjoon Online Judge created with [BaekjoonH
 |  |
 | ------- |
 | [0704-binary-search](https://github.com/jminkkk/Algorithm/tree/master/0704-binary-search) |
+## Tree
+|  |
+| ------- |
+| [0098-validate-binary-search-tree](https://github.com/jminkkk/Algorithm/tree/master/0098-validate-binary-search-tree) |
+## Depth-First Search
+|  |
+| ------- |
+| [0098-validate-binary-search-tree](https://github.com/jminkkk/Algorithm/tree/master/0098-validate-binary-search-tree) |
+## Binary Search Tree
+|  |
+| ------- |
+| [0098-validate-binary-search-tree](https://github.com/jminkkk/Algorithm/tree/master/0098-validate-binary-search-tree) |
+## Binary Tree
+|  |
+| ------- |
+| [0098-validate-binary-search-tree](https://github.com/jminkkk/Algorithm/tree/master/0098-validate-binary-search-tree) |
 <!---LeetCode Topics End-->
