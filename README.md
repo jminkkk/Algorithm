@@ -7,6 +7,7 @@ This is a auto push repository for Baekjoon Online Judge created with [BaekjoonH
 |  |
 | ------- |
 | [0150-evaluate-reverse-polish-notation](https://github.com/jminkkk/Algorithm/tree/master/0150-evaluate-reverse-polish-notation) |
+| [0704-binary-search](https://github.com/jminkkk/Algorithm/tree/master/0704-binary-search) |
 | [0912-sort-an-array](https://github.com/jminkkk/Algorithm/tree/master/0912-sort-an-array) |
 ## Math
 |  |
@@ -76,4 +77,8 @@ This is a auto push repository for Baekjoon Online Judge created with [BaekjoonH
 |  |
 | ------- |
 | [0912-sort-an-array](https://github.com/jminkkk/Algorithm/tree/master/0912-sort-an-array) |
+## Binary Search
+|  |
+| ------- |
+| [0704-binary-search](https://github.com/jminkkk/Algorithm/tree/master/0704-binary-search) |
 <!---LeetCode Topics End-->
