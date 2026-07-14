@@ -4,8 +4,6 @@ class Solution {
         int hi = nums.length - 1;
         while (lo <= hi) {
             int mid = (lo + hi) / 2;
-            System.out.println(lo + " " + hi);
-
             if (nums[mid] == target) return mid;
             
             if (nums[mid] < target) lo = mid + 1;
