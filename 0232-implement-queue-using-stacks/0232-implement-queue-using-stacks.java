@@ -1,6 +1,6 @@
 class MyQueue {
-    private Stack<Integer> input;
-    private Stack<Integer> output;
+    Stack<Integer> input;
+    Stack<Integer> output;
 
     public MyQueue() {
         input = new Stack<>();
@@ -12,10 +12,13 @@ class MyQueue {
     }
     
     public int pop() {
-        if (output.isEmpty()) {
-            // reverse 진행
-            while(!input.isEmpty()) output.push(input.pop());
+        if (!output.isEmpty()) return output.pop();
+
+        while (!input.empty()) {
+            output.push(input.pop());
         }
+
+        if (output.isEmpty()) return -1;
         return output.pop();
     }
     
@@ -26,7 +29,7 @@ class MyQueue {
     }
     
     public boolean empty() {
-        return input.isEmpty() && output.isEmpty();
+        return output.isEmpty() && input.isEmpty();
     }
 }
 
