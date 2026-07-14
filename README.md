@@ -27,6 +27,7 @@ This is a auto push repository for Baekjoon Online Judge created with [BaekjoonH
 | [0142-linked-list-cycle-ii](https://github.com/jminkkk/Algorithm/tree/master/0142-linked-list-cycle-ii) |
 | [0146-lru-cache](https://github.com/jminkkk/Algorithm/tree/master/0146-lru-cache) |
 | [0206-reverse-linked-list](https://github.com/jminkkk/Algorithm/tree/master/0206-reverse-linked-list) |
+| [0876-middle-of-the-linked-list](https://github.com/jminkkk/Algorithm/tree/master/0876-middle-of-the-linked-list) |
 ## Recursion
 |  |
 | ------- |
@@ -114,4 +115,5 @@ This is a auto push repository for Baekjoon Online Judge created with [BaekjoonH
 |  |
 | ------- |
 | [0142-linked-list-cycle-ii](https://github.com/jminkkk/Algorithm/tree/master/0142-linked-list-cycle-ii) |
+| [0876-middle-of-the-linked-list](https://github.com/jminkkk/Algorithm/tree/master/0876-middle-of-the-linked-list) |
 <!---LeetCode Topics End-->
