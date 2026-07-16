@@ -2,36 +2,24 @@ import java.util.*;
 
 class Solution {
     public long solution(int n, int[] times) {
-        long answer = 0;
+        long lo = 0;
+        long hi = (long) Arrays.stream(times).max().getAsInt() * n;
         
-        long maxT = Arrays.stream(times) // 최대 100,000
-                        .max()
-                        .orElse(0);
-        
-        long high = maxT * n + 1;
-        long low = 0;
-        
-        while (true) {
-            if (low + 1 == high) break;
-            long mid = (high + low) / 2;
-            
-            // 불가능 가능
-            if (canJubge(n, times, mid)) high = mid;
-            else low = mid;
+        while (lo + 1 < hi) { // nnnny
+            long mid = (lo + hi) / 2;
+            if (canJudge(times, mid, n)) hi = mid;
+            else lo = mid;
         }
         
-        return high;
+        return hi;
     }
     
-    public boolean canJubge(int n, int[] times, long t) {
-        long totalHuman = n; 
+    private boolean canJudge(int[] times, long mid, int n) { // 시간 안에 심사 가능한지
+        long cnt = 0;
+        for (int t: times) {
+            cnt += Math.ceil(mid / t);
+        } 
         
-        for (int i = 0; i < times.length; i++) {
-            totalHuman -= (t / times[i]);
-            
-            if (totalHuman <= 0) return true;
-        }
-        
-        return false;
+        return cnt >= n;
     }
 }
