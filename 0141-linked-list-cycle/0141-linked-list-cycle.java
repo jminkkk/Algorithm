@@ -10,18 +10,18 @@
  * }
  */
 public class Solution {
-    // Map<Integer, ListNode> map = new HashMap<>();
-    Set<ListNode> set = new HashSet<>();
-
     public boolean hasCycle(ListNode head) {
-        ListNode now = head;
+        ListNode slow = head;
+        ListNode fast = head;
         int idx = 0;
-        while (!set.contains(now)) {
-            if (now == null) return false;
-            set.add(now);
-            now = now.next;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if (slow == fast) return true;
         }
 
-        return true;
+        return false;
     }
 }
