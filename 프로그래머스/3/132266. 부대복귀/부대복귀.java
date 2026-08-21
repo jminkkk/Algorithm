@@ -2,55 +2,60 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int n, int[][] roads, int[] sources, int destination) {
-        int[] depths = new int[n + 1];
-
-        List<List<Integer>> graph = new ArrayList<>();
-        for (int i = 0; i <= n; i++) graph.add(new ArrayList<>());
-        
-        for (int[] r: roads) {
-            graph.get(r[0]).add(r[1]);
-            graph.get(r[1]).add(r[0]);
+        // destination 에서 다른 지역까지의 최단 거리 구한 후 sources에 대한 거리만 반환
+        // 다익스트라 -> O(V log E) -> O(100_000 * log 500_000) -> O(50_000_000 쫌 넘음)
+        List<Integer>[] list = new ArrayList[n + 1];
+        int[] dist = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            list[i] = new ArrayList<>();
+            
+            if (i == destination) dist[i] = 0;
+            else dist[i] = 500_000; // 500_000이 적절한지 확신 X
         }
         
-        int depth = 0;
+        for (int[] r: roads) {
+            int n1 = r[0];
+            int n2 = r[1];
+            list[n1].add(n2);
+            list[n2].add(n1);
+        }
+        
+        PriorityQueue<Node> pq = new PriorityQueue<>();
         boolean[] visited = new boolean[n + 1];
-        
-        Queue<Integer> q = new LinkedList<>();
-        q.add(destination);
-        visited[destination] = true;
-        depths[destination] = depth++;
-        
-        while (!q.isEmpty()) {
-            int size = q.size();
-            for (int i = 0; i < size; i++) {
-                // 노드 방문
-                int now = q.poll();
+        pq.add(new Node(destination, 0));
+        while (!pq.isEmpty()) {
+            Node now = pq.poll();
+            visited[now.n] = true;
+            dist[now.n] = Math.min(dist[now.n], now.v);
                 
-                // 다음 노드 처리
-                List<Integer> close = graph.get(now);
-                for (int next: close) {
-                    if (visited[next]) continue;
-                    q.add(next);
-                    visited[next] = true;
-                    depths[next] = depth;
-                }
+            List<Integer> nexts = list[now.n];
+            for (int next: nexts) {
+                if (visited[next]) continue; // 가중치 1 아니라면, 확신 X
+                pq.add(new Node(next, now.v + 1));
             }
-
-            depth++;
         }
         
         int[] answer = new int[sources.length];
         for (int i = 0; i < sources.length; i++) {
-            int node = sources[i];
-            if (!visited[node]) {
-                answer[i] = -1;
-                continue;
-            }
-            
-            answer[i] = depths[node];
+            int nd = sources[i];
+            if (visited[nd]) answer[i] = dist[nd];
+            else answer[i] = -1;
         }
         
         return answer;
     }
 }
 
+class Node implements Comparable<Node> {
+    int n;
+    int v;
+    
+    Node(int n, int v) {
+        this.n = n;
+        this.v = v;
+    }
+    
+    public int compareTo(Node o) {
+        return Integer.compare(this.v, o.v);
+    }
+}
