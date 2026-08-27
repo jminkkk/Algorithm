@@ -4,36 +4,38 @@ class Solution {
     public int solution(int N, int number) {
         int answer = 0;
         
-        Map<Integer, List<Integer>> map = new HashMap<>();
-
-        for(int i = 1; i <= 8; i++) map.put(i, new ArrayList<>());
-
-        map.get(1).add(N);
-
-        for(int i = 2; i <= 8; i++) {
-            List<Integer> now = map.get(i);
+        // dp[i] = n을 i번 사용했을 때 가능한 수 목록
+        List<Set<Integer>> dp = new ArrayList<>();
+        dp.add(new HashSet<>());
+        for (int count = 1; count <= 8; count++) {
+            dp.add(new HashSet<>());
             
-            for (int j = 1; j < i; j++) {
-                List<Integer> pre = map.get(j);
-                List<Integer> post = map.get(i - j);
-
-                for(int preNum : pre) {
-                    for(int postNum : post) {
-                        now.add(preNum + postNum);
-                        now.add(preNum * postNum);
-
-                        if(preNum - postNum > 0) now.add(preNum - postNum);
-                        if(preNum > 0 && postNum > 0) now.add(preNum / postNum);
+            // 계산 안해도 되는 거 ex) "NN" "NNN"
+            int repeat = 0; 
+            for (int i = 0; i < count; i++) {
+                repeat = repeat * 10 + N;
+            }
+            dp.get(count).add(repeat);
+            
+            
+            // count = i + j
+            for (int i = 1; i <= count; i++) {
+                int j = count - i;
+                
+                for (int a : dp.get(i)) {
+                    for (int b : dp.get(j)) {
+                        dp.get(count).add(a * b);
+                        dp.get(count).add(a + b);
+                        dp.get(count).add(a - b);
+                        
+                        if (b != 0) dp.get(count).add(a / b);
                     }
                 }
-                    
             }
-            now.add(Integer.parseInt(String.valueOf(N).repeat(i)));
-            map.put(i, now);
+            
+            if (dp.get(count).contains(number)) return count;
         }
-
-        for(int i = 1; i <= 8; i++) if(map.get(i).contains(number)) return i;
-
+        
         return -1;
     }
 }
