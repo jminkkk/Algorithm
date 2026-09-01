@@ -2,48 +2,49 @@ import java.util.*;
 
 class Solution {
     public int solution(int[][] jobs) {
-        int answer = 0;
-
         Arrays.sort(jobs, (int[] a, int[] b) -> a[0] - b[0]);
-        int idx = 0;
-        int cnt = 0;
-        int t = 0;
-        int avT = 0;
         
-        PriorityQueue<Node> q = new PriorityQueue<>();
-        while (cnt < jobs.length) {
-            while (idx < jobs.length && jobs[idx][0] <= t) q.offer(new Node(idx, jobs[idx][0], jobs[idx++][1]));
+        // 대상 고르기 위해선
+            // 1. 요청 시각이 현재보다 이후
+            // 2. 1번을 만족한 것들 중 시간이 제일 빨라야 함
+        int nowT = 0;
+        int totalT = 0;
+        int idx = 0;
+
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        while (idx < jobs.length || !pq.isEmpty()) {
+            while (idx < jobs.length && jobs[idx][0] <= nowT) {
+                pq.offer(new Node(idx, jobs[idx][0], jobs[idx][1]));
+                idx++;
+            }
             
-            if (q.isEmpty()) {
-                t = jobs[idx][0];
+            if (pq.isEmpty()) {
+                nowT = jobs[idx][0];
                 continue;
             }
             
-            Node now = q.poll();
-            t += now.duration;
-            avT += (t - now.t);
-            cnt++;
+            Node nd = pq.poll();
+            nowT += nd.duration;
+            totalT += nowT - nd.reqT;
         }
-
-        answer = avT / jobs.length;
-        return answer;
+        
+        return totalT / jobs.length;
     }
 }
 
 class Node implements Comparable<Node> {
     int idx;
-    int t;
+    int reqT;
     int duration;
     
-    Node(int idx, int t, int duration) {
+    Node (int idx, int reqT, int duration) {
         this.idx = idx;
-        this.t = t;
+        this.reqT = reqT;
         this.duration = duration;
     }
     
     public int compareTo(Node o) {
-        if (this.duration != o.duration) return Integer.compare(this.duration, o.duration);
-        if (this.t != o.t) return Integer.compare(this.t, o.t);
+        if (o.duration != this.duration) return Integer.compare(this.duration, o.duration);
         return Integer.compare(this.idx, o.idx);
     }
 }
