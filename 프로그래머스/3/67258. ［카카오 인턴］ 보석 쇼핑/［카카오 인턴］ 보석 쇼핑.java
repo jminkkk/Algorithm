@@ -1,42 +1,48 @@
-
 import java.util.*;
 
 class Solution {
-    public int[] solution(String[] gems) {
-        Set<String> set = new HashSet<>(Arrays.asList(gems));
-        Map<String, Integer> cntMap = new HashMap<>();
+    public int[] solution(String[] gems) {        
+        int uniqueCnt = (int) Arrays.stream(gems).distinct().count();
+        
+        int lo = uniqueCnt - 1;
+        int hi = gems.length;
 
-        int left = 0;
-        int right = 0;
-        cntMap.put(gems[0], 1);
+        int result = -1;
+        while (lo + 1 < hi) { // O(logN)
+            int mid = (lo + hi) / 2;
+            
+            result = canBuy(mid, gems, uniqueCnt); // O(logN)
+            if (result != -1) hi = mid;
+            else lo = mid;
+        }
+        
+        result = canBuy(hi, gems, uniqueCnt);        
+        
+        int[] answer = new int[]{result + 1, result + hi};
+        return answer;
+    }
+    
+    // mid 구간안에 unique Count이 들어오는가
+    private int canBuy(int mid, String[] gems, long uniqueCnt) { 
+        Map<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < mid; i++) map.put(gems[i], i);
+        
+        if (map.size() == uniqueCnt) return 0;
+                
+        int str = 0;
+        int end = mid - 1;
 
-        int[] min = new int[]{0, gems.length - 1};
+        while (true) { // O(N)
+            if (map.get(gems[str]) == str) map.remove(gems[str]);
 
-        while (left <= right && right < gems.length) {
+            str++;
+            end++;
 
-            if (cntMap.size() == set.size()) {
-
-                if (right - left < min[1] - min[0]) {
-                    min = new int[]{left, right};
-                }
-
-                cntMap.put(gems[left], cntMap.get(gems[left]) - 1);
-                if (cntMap.get(gems[left]) == 0) {
-                    cntMap.remove(gems[left]);
-                }
-
-                left++;
-
-            } else {
-
-                right++;
-                if (right == gems.length) break;
-
-                cntMap.put(gems[right],
-                        cntMap.getOrDefault(gems[right], 0) + 1);
-            }
+            if (end >= gems.length) break;
+            map.put(gems[end], end);
+            if (map.size() == uniqueCnt) return str; // O(N)
         }
 
-        return new int[]{min[0] + 1, min[1] + 1};
+        return -1;
     }
 }
