@@ -1,44 +1,54 @@
+
+import java.util.*;
 class Solution {
-    int max = 0;
-    int[] parents;
+    
+    List<List<Integer>> graph = new ArrayList<>();
+    int answer = 0;
     
     public int solution(int[] info, int[][] edges) {
-        parents = new int[info.length];
-        parents[0] = -1;
+        for (int i = 0; i < info.length; i++) graph.add(new ArrayList<>());
+        
         for (int[] e: edges) {
-            int p = e[0];
-            int s = e[1];
-            parents[s] = p;
+            int a = e[0];
+            int b = e[1];
+            List<Integer> aList = graph.get(a);
+            aList.add(b);
+            List<Integer> bList = graph.get(b);
+            bList.add(a);
         }
         
         boolean[] visited = new boolean[info.length];
         visited[0] = true;
-        dfs(1, 0, info, visited);
+        dfs(0, 1, 0, info, visited);
         
-        return max;
+        return answer;
     }
     
-    public void dfs(int sheep, int wolf, int[] info, boolean[] visited) {
-        max = Math.max(max, sheep);
-
+    public void dfs(int now, int sheepCnt, int wolfCnt, int[] info, boolean[] visited) {
+        // 방문
+        answer = Math.max(answer, sheepCnt);
+            
+        // 이동
         for (int i = 0; i < info.length; i++) {
-            if (visited[i]) continue;
+            if (!visited[i]) continue;
             
-            // 부모가 이미 방문했어야 함
-            if (!visited[parents[i]]) continue;
-            
-            // 양 늑대 조건 만족
-            if (info[i] == 0) {
-                visited[i] = true;
-                dfs(sheep + 1, wolf, info, visited);
-                visited[i] = false;
-            } else {
-                if (sheep <= wolf + 1) continue;
-                
-                visited[i] = true;
-                dfs(sheep, wolf + 1, info, visited);
-                visited[i] = false;
+            List<Integer> list = graph.get(i);
+            for (int j = 0; j < list.size(); j++) {
+                int next = list.get(j);
+
+                // 이미 방문 했다면 안감
+                if (visited[next]) continue;
+
+                // 가는 순간 양 죽으면 안감
+                if (info[next] == 1 && sheepCnt == wolfCnt + 1) continue;
+
+                visited[next] = true;
+
+                if (info[next] == 0) dfs(next, sheepCnt + 1, wolfCnt, info, visited);
+                else dfs(next, sheepCnt, wolfCnt + 1, info, visited);
+
+                visited[next] = false;
             }
-        }
+        }            
     }
 }
