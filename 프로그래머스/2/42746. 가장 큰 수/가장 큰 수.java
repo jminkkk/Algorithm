@@ -1,20 +1,13 @@
 import java.util.*;
+import java.util.stream.*;
 
 class Solution {
     public String solution(int[] numbers) {
-        String[] str = new String[numbers.length];
-        for (int i = 0; i < numbers.length; i++) {
-            str[i] = String.valueOf(numbers[i]);
-        }
+        String answer = Arrays.stream(numbers)
+            .mapToObj(String::valueOf)
+            .sorted((a, b) -> (b + a).compareTo(a + b))
+            .collect(Collectors.joining());
         
-        Arrays.sort(str, (String a, String b) -> {
-            return (b + a).compareTo(a + b);
-        });
-    
-        if (str[0].equals("0")) {
-            return "0";
-        }
-        return String.join("", str);
+        return answer.charAt(0) == '0' ? "0" : answer;
     }
 }
-
